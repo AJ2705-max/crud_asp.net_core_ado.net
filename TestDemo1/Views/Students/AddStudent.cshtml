@@ -1,0 +1,42 @@
+﻿@model TestDemo1.Models.StudentsModel; 
+
+
+
+
+
+@{
+    ViewData["Title"] = "Add New Student";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<div class="row">
+    <div class="col-6">
+        <div class="shadow-sm p-2">
+            <form asp-action="AddStudent">
+
+                <div class="mb-2">
+                    <label asp-for="StudentName" class="form-label">Student Name</label>
+                    <input asp-for="StudentName" type="text" class="form-control">
+                </div>
+
+                <div class="mb-2">
+                    <label asp-for="StudentAddress" class="form-label">Student Address</label>
+                    <input asp-for="StudentAddress" type="text" class="form-control">
+                </div>
+
+
+                <div class="mb-2">
+                    <label asp-for="StudentAge" class="form-label">Student Age</label>
+                    <input asp-for="StudentAge" type="number" class="form-control">
+                </div>
+
+                
+
+                <button type="submit" class="btn btn-primary">Submit</button>
+                <a asp-action="ViewStudents">List of Students</a>
+
+            </form>
+        </div>
+    </div>
+</div>

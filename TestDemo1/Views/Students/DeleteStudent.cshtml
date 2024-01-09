@@ -1,0 +1,43 @@
+﻿@model TestDemo1.Models.StudentsModel
+
+@{
+    ViewData["Title"] = "Delete Student Data";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<div class="row">
+    <div class="col-6">
+        <div class="shadow-sm p-2">
+            <form asp-action="DeleteStudent">
+
+                <div class="mb-2">
+                    <label asp-for="StudentId" class="form-label">Student Id</label>
+                    <input asp-for="StudentId" type="number" class="form-control" value="@Model.StudentId">
+                </div>
+
+                <div class="mb-2">
+                    <label asp-for="StudentName" class="form-label">Student Name</label>
+                    <input asp-for="StudentName" type="text" class="form-control" value="@Model.StudentName" >
+                </div>
+
+                <div class="mb-2">
+                    <label asp-for="StudentAddress" class="form-label">Student Address</label>
+                    <input asp-for="StudentAddress" type="text" class="form-control" value="@Model.StudentAddress">
+                </div>
+
+                <div class="mb-2">
+                    <label asp-for="StudentAge" class="form-label">Student Age</label>
+                    <input asp-for="StudentAge" type="number" class="form-control" value="@Model.StudentAge">
+                </div>
+
+                <div class="mb-2">
+                    <p>Are you sure you want to delete this student?</p>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-lg">Delete</button>
+                <a asp-action="Index" class="btn btn-secondary btn-sm">Cancel</a>
+            </form>
+        </div>
+    </div>
+</div>
