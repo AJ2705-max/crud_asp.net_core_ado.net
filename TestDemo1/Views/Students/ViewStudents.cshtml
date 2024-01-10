@@ -1,19 +1,19 @@
 ﻿@model IEnumerable<TestDemo1.Models.StudentsModel>
-    ;
+    
 
-    @{
+@{
     ViewData["title"] = "Student Details";
-    }
+}
 
-    <h2>@ViewData["title"]</h2>
+<h2>@ViewData["title"]</h2>
 
-    @* <div class="mb-3">
-            <a asp-action="AddStudent" class="btn btn-info">Add New Student</a>
-        </div> *@
+        <div class="mb-3">
+            <a asp-action="addstudent" class="btn btn-info">add new student</a>
+        </div>
 
-    <hr />
+<hr />
 
-    @if (Model != null)
+@if (Model != null)
 {
     <table class="table" id="student-table">
         <thead>
@@ -28,16 +28,16 @@
         <tbody>
             @foreach (var item in Model)
             {
-            <tr>
-                <td>@Html.DisplayFor(modelItem => item.StudentId)</td>
-                <td>@Html.DisplayFor(modelItem => item.StudentName)</td>
-                <td>@Html.DisplayFor(modelItem => item.StudentAddress)</td>
-                <td>@Html.DisplayFor(modelItem => item.StudentAge)</td>
-                <td>
-                    <a class="btn btn-success" asp-action="UpdateStudent" asp-route-StudentId="@item.StudentId">Update</a> |
-                    <a class="btn btn-danger" asp-action="DeleteStudent" asp-route-StudentId="@item.StudentId">Delete</a>
-                </td>
-            </tr>
+                <tr>
+                    <td>@Html.DisplayFor(modelItem => item.StudentId)</td>
+                    <td>@Html.DisplayFor(modelItem => item.StudentName)</td>
+                    <td>@Html.DisplayFor(modelItem => item.StudentAddress)</td>
+                    <td>@Html.DisplayFor(modelItem => item.StudentAge)</td>
+                    <td>
+                        <a class="btn btn-success" asp-action="UpdateStudent" asp-route-StudentId="@item.StudentId">Update</a> |
+                        <a class="btn btn-danger" asp-action="DeleteStudent" asp-route-StudentId="@item.StudentId">Delete</a>
+                    </td>
+                </tr>
             }
         </tbody>
     </table>
@@ -45,45 +45,45 @@
 else
 {
     <h2>No Data Available</h2>
-}<!-- Button trigger modal -->
-    <!-- The Modal -->
-    <div class="modal" id="studentModal">
-        <div class="modal-dialog">
-            <div class="modal-content">
+}
 
-                <!-- Modal Header -->
-                <div class="modal-header">
-                    <h4 class="modal-title">Student Details</h4>
-                    <button type="button" class="close" data-dismiss="modal">×</button>
-                </div>
 
-                <!-- Modal Body -->
-                <div class="modal-body">
-                    <form id="studentForm">
-                        <div class="form-group">
-                            <label for="studentname">Student Name:</label>
-                            <input type="text" class="form-control" id="name">
-                        </div>
-                        <div class="form-group">
-                            <label for="studentaddress">Student Address:</label>
-                            <input type="text" class="form-control" id="name">
-                        </div>
-                        <div class="form-group">
-                            <label for="studentage">Student Age:</label>
-                            <input type="number" class="form-control" id="age">
-                        </div>
-                        <!-- Add more fields as necessary -->
-                    </form>
-                </div>
+<div class="modal" id="studentModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
 
-                <!-- Modal Footer -->
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-info" id="editBtn">Edit</button>
-                    <button type="button" class="btn btn-success" id="saveBtn">Save</button>
-                    <button type="button" class="btn btn-danger" id="deleteBtn">Delete</button>
-                </div>
-
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">Student Details</h4>
+                <button type="button" class="close" data-dismiss="modal">×</button>
             </div>
+
+            <!-- Modal Body -->
+            <div class="modal-body">
+                <form id="studentForm">
+                    <div class="form-group">
+                        <label for="studentname">Student Name:</label>
+                        <input type="text" class="form-control" id="studentname">
+                    </div>
+                    <div class="form-group">
+                        <label for="studentaddress">Student Address:</label>
+                        <input type="text" class="form-control" id="studentaddress">
+                    </div>
+                    <div class="form-group">
+                        <label for="studentage">Student Age:</label>
+                        <input type="number" class="form-control" id="studentage">
+                    </div>
+                    <!-- Add more fields as necessary -->
+                </form>
+            </div>
+
+            <!-- Modal Footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-info" id="editBtn">Edit</button>
+                <button type="button" class="btn btn-success" id="saveBtn">Save</button>
+                <button type="button" class="btn btn-danger" id="deleteBtn">Delete</button>
+            </div>
+
         </div>
     </div>
-
+</div>
