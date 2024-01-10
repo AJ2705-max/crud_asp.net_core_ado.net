@@ -43,6 +43,7 @@ namespace TestDemo1.Controllers
                 }
             }
             return View(studentList);
+            //return View("~/Views/Students/test.cshtml");
         }
 
         public IActionResult AddStudent()
