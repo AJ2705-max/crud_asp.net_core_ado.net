@@ -15,7 +15,11 @@
 
 @if (Model != null)
 {
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+            Launch demo modal
+        </button>
     <table class="table" id="student-table">
+
         <thead>
             <tr>
                 <th>Student Id</th>
@@ -45,9 +49,19 @@
 else
 {
     <h2>No Data Available</h2>
+<<<<<<< HEAD
 }
+=======
+}<!-- Button trigger modal -->
+    <!-- The Modal -->
+
+    <div class="modal" id="studentModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+>>>>>>> cc34f721bd755634c531dd75daf7f86f11f74c3e
 
 
+<<<<<<< HEAD
 <div class="modal" id="studentModal">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -56,6 +70,34 @@ else
             <div class="modal-header">
                 <h4 class="modal-title">Student Details</h4>
                 <button type="button" class="close" data-dismiss="modal">×</button>
+=======
+                <!-- Modal Body -->
+                <div class="modal-body">
+                    <form id="studentForm">
+                        <div class="form-group">
+                            <label for="studentname">Student Name:</label>
+                            <input type="text" class="form-control" id="name">
+                        </div>
+                        <div class="form-group">
+                            <label for="studentaddress">Student Address:</label>
+                            <input type="text" class="form-control" id="name">
+                        </div>
+                        <div class="form-group">
+                            <label for="studentage">Student Age:</label>
+                            <input type="number" class="form-control" id="age">
+                        </div>
+                        <!-- Add more fields as necessary -->
+                    </form>
+                </div>
+
+                <!-- Modal Footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-info" id="editBtn">Edit</button>
+                    <button type="button" class="btn btn-success" id="saveBtn">Save</button>
+                    <button type="button" class="btn btn-danger" id="deleteBtn">Delete</button>
+                </div>
+                
+>>>>>>> cc34f721bd755634c531dd75daf7f86f11f74c3e
             </div>
 
             <!-- Modal Body -->
@@ -86,4 +128,34 @@ else
 
         </div>
     </div>
+<<<<<<< HEAD
 </div>
+=======
+<div class="modal " id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                ...
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+                        @* <script>
+                            function openModal(){
+                                $(".modal").modal("show");
+                            }
+                            function closeModal(){
+        $(".modal").modal("hide")
+                            } *@
+                        @* </script> *@
+>>>>>>> cc34f721bd755634c531dd75daf7f86f11f74c3e
