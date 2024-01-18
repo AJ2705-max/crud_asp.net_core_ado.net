@@ -24,7 +24,7 @@
 
                 <div class="mb-2">
                     <label asp-for="StudentAge" class="form-label">Student Age</label>
-                    <input asp-for="StudentAge" type="number" class="form-control" value="@Model.StudentAge">
+                    <input asp-for="StudentAge" type="number" class="form-control" value="@Model.StudentAge" min="5" max="18">
                 </div>
 
                 <button type="submit" class="btn btn-primary">Update</button>

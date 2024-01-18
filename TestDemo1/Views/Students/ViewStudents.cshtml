@@ -1,23 +1,158 @@
 ﻿@model IEnumerable<TestDemo1.Models.StudentsModel>
-    
 
-    @{
+
+@{
     ViewData["title"] = "Student Details";
-    }
+}
 
-    <h2>@ViewData["title"]</h2>
+<h2>@ViewData["title"]</h2>
 
-    @* <div class="mb-3">
+@* <div class="mb-3">
             <a asp-action="AddStudent" class="btn btn-info">Add New Student</a>
         </div> *@
 
-    <hr />
+<hr />
 
-    @if (Model != null)
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#studentModal">
+    Add Student
+</button>
+
+
+
+<!-- Button trigger modal -->
+<!-- The Modal -->
+
+<div class="modal" id="studentModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">Add Student Details</h4>
+                <button type="button" class="close" data-dismiss="modal">×</button>
+            </div>
+
+            <!-- Modal Body -->
+            <div class="modal-body">
+                <form id="studentForm" name="addstudent">
+                    <div class="form-group">
+                        <label for="StudentName">Student Name:</label>
+                        <input id="StudentName" type="text" name="StudentName" autocomplete="off" maxlength="10" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="StudentAddress">Student Address:</label>
+                        <input id="StudentAddress" type="text" name="StudentAddress" autocomplete="off" maxlength="10" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="StudentAge">Student Age:</label>
+                        <input id="StudentAge" type="number" name="StudentAge" class="form-control" autocomplete="off" min="5" max="18" required>
+
+                    </div>
+                    <!-- Add more fields as necessary -->
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-success" id="saveBtn" onclick="AddStudent()">Save</button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+@* <--Modal for update  Student-->
+ *@
+
+
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="updateStudentModal" tabindex="-1" role="dialog" aria-labelledby="updateStudentModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="updateStudentModalLabel">Update Student Details</h5>
+                <button type="button" class="close" data-dismiss="modal">×</button>
+
+            </div>
+            <div class="modal-body">
+                <form>
+
+                    <div class="form-group">
+                        <label for="UStudentId" class="col-form-label">Student Id:</label>
+                        <input type="text" class="form-control" id="UStudentId" readonly>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="UStudentName" class="col-form-label">Student Name:</label>
+                        <input type="text" class="form-control" id="UStudentName">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="UStudentAddress" class="col-form-label">Student Address:</label>
+                        <input type="text" class="form-control" id="UStudentAddress">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="UStudentAge" class="col-form-label">Student Age:</label>
+                        <input type="text" class="form-control" id="UStudentAge">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="updateButton" onclick="UpdateStudent()">Update</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal for View Data -->
+<div class="modal fade" id="viewStudentModal" tabindex="-1" aria-labelledby="viewStudentModal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="viewStudentModal">Student View</h5>
+                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form>
+
+                    <div class="mb-3">
+                        <label for="VStudentId" class="form-label">Student Id : </label>
+                        <input id="VStudentId" name="StudentId" type="text" class="form-control" autocomplete="off" readonly />
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="VStudentName" class="form-label">Student Name : </label>
+                        <input id="VStudentName" name="StudentName" type="text" class="form-control" autocomplete="off" readonly />
+                    </div>
+                        
+
+                    <div class="mb-3">
+                        <label for="VStudentAddress" class="form-label">Student Address : </label>
+                        <input id="VStudentAddress" name="StudentAddress" type="text" class="form-control" autocomplete="off" readonly />
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="VStudentAge" class="form-label">Student Age : </label>
+                        <input id="VStudentAge" name="StudentAge" type="number" class="form-control" autocomplete="off" readonly />
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" onclick="UpdateStudent()" class="btn btn-success">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@if (Model != null)
 {
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-            Launch demo modal
-        </button>
+
     <table class="table" id="student-table">
 
         <thead>
@@ -32,16 +167,24 @@
         <tbody>
             @foreach (var item in Model)
             {
-            <tr>
-                <td>@Html.DisplayFor(modelItem => item.StudentId)</td>
-                <td>@Html.DisplayFor(modelItem => item.StudentName)</td>
-                <td>@Html.DisplayFor(modelItem => item.StudentAddress)</td>
-                <td>@Html.DisplayFor(modelItem => item.StudentAge)</td>
-                <td>
-                    <a class="btn btn-success" asp-action="UpdateStudent" asp-route-StudentId="@item.StudentId">Update</a> |
-                    <a class="btn btn-danger" asp-action="DeleteStudent" asp-route-StudentId="@item.StudentId">Delete</a>
-                </td>
-            </tr>
+                <tr>
+                    <td>@Html.DisplayFor(modelItem => item.StudentId)</td>
+                    <td>@Html.DisplayFor(modelItem => item.StudentName)</td>
+                    <td>@Html.DisplayFor(modelItem => item.StudentAddress)</td>
+                    <td>@Html.DisplayFor(modelItem => item.StudentAge)</td>
+                    <td>
+
+                        <a class="btn btn-info" onclick="PopulateUpdateStudent(@item.StudentId)" data-bs-toggle="modal" data-bs-target="#updateStudentModal">Update</a>
+                        <a class="btn btn-primary" onclick="ViewStudents(@item.StudentId)" data-bs-toggle="modal" data-bs-target="#viewStudentModal">View</a>
+                        <a class="btn btn-danger" onclick="DeleteStudent(@item.StudentId)">Delete</a>
+
+
+                       
+                        @*  <a class="btn btn-success" asp-action="updatestudent" asp-route-studentid="@item.studentid">update</a>
+                <a class="btn btn-danger" asp-action="deletestudent" asp-route-studentid="@item.studentid">delete</a> |
+                 *@
+                    </td>
+                </tr>
             }
         </tbody>
     </table>
@@ -49,49 +192,9 @@
 else
 {
     <h2>No Data Available</h2>
-}<!-- Button trigger modal -->
-    <!-- The Modal -->
+}
 
-    <div class="modal" id="studentModal">
-        <div class="modal-dialog">
-            <div class="modal-content">
-
-                <!-- Modal Header -->
-                <div class="modal-header">
-                    <h4 class="modal-title">Student Details</h4>
-                    <button type="button" class="close" data-dismiss="modal">×</button>
-                </div>
-
-                <!-- Modal Body -->
-                <div class="modal-body">
-                    <form id="studentForm">
-                        <div class="form-group">
-                            <label for="studentname">Student Name:</label>
-                            <input type="text" class="form-control" id="name">
-                        </div>
-                        <div class="form-group">
-                            <label for="studentaddress">Student Address:</label>
-                            <input type="text" class="form-control" id="name">
-                        </div>
-                        <div class="form-group">
-                            <label for="studentage">Student Age:</label>
-                            <input type="number" class="form-control" id="age">
-                        </div>
-                        <!-- Add more fields as necessary -->
-                    </form>
-                </div>
-
-                <!-- Modal Footer -->
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-info" id="editBtn">Edit</button>
-                    <button type="button" class="btn btn-success" id="saveBtn">Save</button>
-                    <button type="button" class="btn btn-danger" id="deleteBtn">Delete</button>
-                </div>
-                
-            </div>
-        </div>
-    </div>
-<div class="modal " id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+@* <div class="modal " id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -109,12 +212,386 @@ else
             </div>
         </div>
     </div>
-</div>
-                        @* <script>
-                            function openModal(){
-                                $(".modal").modal("show");
-                            }
-                            function closeModal(){
+</div> *@
+<script>
+    function openModal() {
+        $(".modal").modal("show");
+    }
+    function closeModal() {
         $(".modal").modal("hide")
-                            } *@
-                        @* </script> *@
+    }
+
+    // $(document).ready(function () {
+    //     $("#submit").click(function () {
+
+    // $(document).ready(function () {
+    //     $("#savebtn").click(function () {
+    //         addstudent();
+    //     });
+    // });
+
+    $(document).ready(function () {
+        $("#viewbtn").click(function () {
+            viewStudent();
+        });
+    });
+
+
+
+    function AddStudent() {
+        var StudentName = $("#StudentName").val();
+        var StudentAddress = $("#StudentAddress").val();
+        var StudentAge = $("#StudentAge").val();
+
+        var oModel = { StudentName: StudentName, StudentAddress: StudentAddress, StudentAge: StudentAge };
+
+        var formData = new FormData();
+        for (var key in oModel) {
+            formData.append(key, oModel[key]);
+        }
+
+        $.ajax({
+            type: "POST",
+            url: "/Students/AddStudent",
+            data: formData,
+            processData: false,
+            contentType: false,
+            cache: false,
+            success: function (data) {
+                if (data) {
+                    Swal.fire({
+                        title: "Good job!",
+                        text: "Data inserted successfully",
+                        icon: "success",
+                        button: "Ok",
+                    });
+                }
+            },
+            error: function (errorThrown) {
+                console.log("Error saving employee:", errorThrown);
+                Swal.fire("Oops", "An error occurred while saving your data, Please try again later.", "error");
+            }
+        });
+    }
+
+    // function PopulateUpdateStudent(StudentId) {
+    //     debugger;
+
+    //     $.ajax({
+    //         type: "GET",
+    //         url: "/Students/PopulateUpdateStudent/" + StudentId,
+    //         success: function (data) {
+
+    //             $('#UStudentId').val(data.StudentId);
+    //             $('#UStudentName').val(data.StudentName);
+    //             $('#UStudentAddress').val(data.StudentAddress);
+    //             $('#UStudentAge').val(data.StudentAge);
+    //         },
+    //         error: function (errorThrown) {
+    //             console.log("Error fetching students:", errorThrown);
+    //             Swal.fire("Oops", "An error occurred while fetching your data, Please try again later.", "error");
+    //         }
+    //     });
+    // }
+
+    function PopulateUpdateStudent(StudentId) {
+        debugger;
+        $.ajax({
+            type: "GET",
+            url: "/Students/PopulateUpdateStudent?studentid=" + StudentId,
+            success: function (data) {
+                debugger;
+                // Assuming 'data' is an object with student details
+                $('#UStudentId').val(data.studentId);
+                $('#UStudentName').val(data.studentName);
+                $('#UStudentAddress').val(data.studentAddress);
+                $('#UStudentAge').val(data.studentAge);
+            },
+            error: function (errorThrown) {
+                console.log("Error fetching students:", errorThrown);
+                Swal.fire("Oops", "An error occurred while fetching your data, Please try again later.", "error");
+            }
+        });
+    }
+
+    function UpdateStudent() {
+        debugger;
+        var StudentId = $("#UStudentId").val();
+        var StudentName = $("#UStudentName").val();
+        var StudentAddress = $("#UStudentAddress").val();
+        var StudentAge = $("#UStudentAge").val();
+
+        var oModel = { StudentId: StudentId, StudentName: StudentName, StudentAddress: StudentAddress, StudentAge: StudentAge };
+
+        var formData = new FormData();
+        for (var key in oModel) {
+            formData.append(key, oModel[key]);
+        }
+
+        $.ajax({
+            type: "POST",
+            url: "/Students/UpdateStudent/",
+            data: formData,
+            processData: false,
+            contentType: false,
+            cache: false,
+            success: function (data) {
+                if (data) {
+                    Swal.fire({
+                        title: "Good job!",
+                        text: "Data updated successfully",
+                        icon: "success",
+                        button: "Ok",
+                    });
+                }
+            },
+            error: function (errorThrown) {
+                console.log("Error updating student:", errorThrown);
+                Swal.fire("Oops", "An error occurred while updating your data, Please try again later.", "error");
+            }
+        });
+    }
+
+
+    function ViewStudents() {
+        $.ajax({
+            type: "GET",
+            url: "/Students/ViewStudents?studentid=" + StudentId,
+            success: function (student) {
+                // Assuming 'student' is an object with the student's details
+                // Populate the student data in your HTML
+                var StudentId = student.StudentId;
+                var StudentName = student.StudentName;
+                var StudentAddress = student.StudentAddress;
+                var StudentAge = student.StudentAge;
+
+                $('#StudentId').val(StudentId);
+                $('#StudentName').val(StudentName);
+                $('#StudentAddress').val(StudentAddress);
+                $('#StudentAge').val(StudentAge);
+            },
+            error: function (errorThrown) {
+                console.log("Error fetching student:", errorThrown);
+                Swal.fire("Oops", "An error occurred while fetching the student data, Please try again later.", "error");
+            }
+        });
+    }
+
+
+
+
+    // function populateupdatestudent(studentid) {
+    //     debugger;
+    //     $.ajax({
+    //         type: "get",
+    //         url: "/students/populateupdatestudent/" + studentid, // updated parameter name
+    //         success: function (student) {
+    //             // populate the form with the received student details
+    //             $('#StudentId').val(student.studentid);
+    //             $('#StudentName').val(student.StudentName);
+    //             $('#StudentAddress').val(student.StudentAddress);
+    //             $('#StudentAge').val(student.StudentAge);
+    //         },
+    //         error: function (errormessage) {
+    //             alert(errormessage.responsetext);
+    //         }
+    //     });
+    // }
+
+    // function PopulateUpdateStudent() {
+    //     $.ajax({
+    //         url: "/Students/PopulateUpdateStudent",
+    //         type: "GET",
+    //         // contentType: "application/json;charset=utf-8",
+    //         dataType: "json",
+    //         success: function (result) {
+    //             var html = '';
+    //             $.each(result, function (key, student) {
+    //                 html += '<tr>';
+    //                 html += '<td>' + student.StudentId + '</td>';
+    //                 html += '<td>' + student.StudentName + '</td>';
+    //                 html += '<td>' + student.StudentAddress + '</td>';
+    //                 html += '<td>' + student.StudentAge + '</td>';
+    //                 html += '<td><a href="#" onclick="return getbyID(' + student.StudentId + ')">Edit</a> | <a href="#" onclick="Delele(' + student.StudentId + ')">Delete</a></td>';
+    //                 html += '</tr>';
+    //             });
+    //             $('.tbody').html(html);
+    //         },
+    //         error: function (errormessage) {
+    //             alert(errormessage.responseText);
+    //         }
+    //     });
+    // }
+
+    // function getbyID(StudentId) {
+    //     $.ajax({
+    //         type: "GET",
+    //         url: "/Students/GetStudent/" + StudentId,
+    //         success: function (student) {
+    //             // Populate the form with the received student details
+    //             $('#update_id').val(student.StudentId);
+    //             $('#StudentName').val(student.StudentName);
+    //             $('#StudentAddress').val(student.StudentAddress);
+    //             $('#StudentAge').val(student.StudentAge);
+    //             // Show the modal (assuming you're using Bootstrap)
+    //             $('#updateStudentModal').modal('show');
+    //         },
+    //         error: function (errormessage) {
+    //             alert(errormessage.responseText);
+    //         }
+    //     });
+    // }
+
+
+
+    // function UpdateStudent() {
+    //     var StudentId = $("#StudentId").val();
+    //     var StudentName = $("#StudentName").val();
+    //     var StudentAddress = $("#StudentAddress").val();
+    //     var StudentAge = $("#StudentAge").val();
+
+    //     var oModel = { StudentId: StudentId, StudentName: StudentName, StudentAddress: StudentAddress, StudentAge: StudentAge };
+
+    //     var formData = new FormData();
+    //     for (var key in oModel) {
+    //         formData.append(key, oModel[key]);
+    //     }
+
+    //     $.ajax({
+    //         type: "POST",
+    //         url: "/Students/UpdateStudent/", // Assuming you have an UpdateStudent action in your Students controller
+    //         data: formData,
+    //         processData: false,
+    //         contentType: false,
+    //         cache: false,
+    //         success: function (data) {
+    //             if (data) {
+    //                 Swal.fire({
+    //                     title: "Good job!",
+    //                     text: "Data updated successfully",
+    //                     icon: "success",
+    //                     button: "Ok",
+    //                 });
+    //             }
+    //         },
+    //         error: function (errorThrown) {
+    //             console.log("Error updating student:", errorThrown);
+    //             Swal.fire("Oops", "An error occurred while updating your data, Please try again later.", "error");
+    //         }
+    //     });
+    // }
+
+
+
+
+
+    // function ViewStudents(studentid) {
+    //     debugger;
+    //     $.ajax({
+    //         type: "GET",
+    //         url: "/Students/PopulateUpdateStudent/", // Adjust the URL to your endpoint
+    //         success: function (student) {
+    //             // Populate the form with the received student details
+    //             $('#StudentId').val(student.studentid);
+    //             $('#StudentName').val(student.StudentName);
+    //             $('#StudentAddress').val(student.StudentAddress);
+    //             $('#StudentAge').val(student.StudentAge);
+    //         },
+    //         error: function (errormessage) {
+    //             alert(errormessage.responseText);
+    //         }
+    //     });
+    // }
+
+
+
+    // function DeleteStudent(StudentId) {
+
+    //     $.ajax({
+    //         type: "GET",
+    //         url: "/Students/DeleteStudent/" + StudentId, // Assuming you have a DeleteStudent action in your Students controller
+    //         data: formData,
+    //         processData: false,
+    //         contentType: false,
+    //         cache: false,
+    //         success: function (data) {
+    //             if (data) {
+    //                 Swal.fire({
+    //                     title: "Done!",
+    //                     text: "Student deleted successfully",
+    //                     icon: "success",
+    //                     button: "Ok",
+    //                 });
+    //             }
+    //         },
+    //         error: function (errorThrown) {
+    //             console.log("Error deleting student:", errorThrown);
+    //             Swal.fire("Oops", "An error occurred while deleting the student, Please try again later.", "error");
+    //         }
+    //     });
+    // }
+
+    function DeleteStudent(StudentId) {
+        if (confirm("Are you sure you want to delete this Student?")) {
+            $.ajax({
+                type: "POST", // or "GET" depending on your server-side implementation
+                url: "/Students/DeleteStudent?studentid=" + StudentId,
+                success: function (data) {
+                    alert("Student deleted successfully!");
+
+                    get();
+                },
+                error: function (error) {
+                    console.error("Error deleting Student:", error);
+                }
+            });
+        }
+    }
+
+
+    // $ function() {
+    //     $("form[name = 'addstudent']").validate({
+    //         rules: {
+    //             // The key name on the left side is the name attribute
+    //             // of an input field. Validation rules are defined
+    //             // on the right side
+    //             StudentName: {
+    //                 required: true,
+    //                 maxlength: 5
+    //             },
+    //             StudentAddress: {
+    //                 required: true,
+    //                 maxlength: 5
+    //             },
+    //             StudentAge: {
+    //                 required: true,
+    //                 maxlength: 2
+    //             }
+    //         },
+    //         messages: {
+    //             StudentName: {
+    //                 required: true,
+    //                 maxlength: "Your Student Name must be not more than 5 Characters"
+    //             },
+    //             StudentAddress: {
+    //                 required: true,
+    //                 maxlength: "Your Student Address must be not more than 5 Characters"
+    //             },
+    //             StudentAge: {
+    //                 required: true,
+    //                 maxlength: "StudentAge must be at max 2 characters long"
+    //             }
+    //         },
+
+    //     })
+    // }
+
+
+
+
+    function closeModal() {
+        $(".modal").modal("hide");
+    }
+
+
+</script>

@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MySql.Data.MySqlClient;
 using TestDemo1.Models;
+using System.Text.Json;
+using Microsoft.AspNetCore.Http;
 
 namespace TestDemo1.Controllers
 {
@@ -54,6 +56,7 @@ namespace TestDemo1.Controllers
         [HttpPost]
         public IActionResult AddStudent(StudentsModel student)
         {
+
             using (MySqlConnection connection = new MySqlConnection(connectionString))
             {
                 const string query = "INSERT INTO Students (StudentName, StudentAddress, StudentAge) values (@StudentName, @StudentAddress, @StudentAge);";
@@ -70,17 +73,15 @@ namespace TestDemo1.Controllers
 
                 }
             }
-            return RedirectToAction("ViewStudents");
+            return Json("ViewStudents");
         }
-    
-
 
         [HttpGet]
-        public IActionResult UpdateStudent(int studentid)
+        public IActionResult PopulateUpdateStudent(int studentid)
         {
             StudentsModel studentsmodel = null;
 
-            const string querystring = "select * from students where studentid = @studentid";
+            const string querystring = "SELECT * FROM students WHERE StudentId = @studentid";
 
             using (MySqlConnection connection = new MySqlConnection(connectionString))
             {
@@ -96,22 +97,58 @@ namespace TestDemo1.Controllers
                     {
                         studentsmodel = new StudentsModel();
 
+                        studentsmodel.StudentId = (int)reader["StudentId"];
                         studentsmodel.StudentName = reader["StudentName"].ToString();
                         studentsmodel.StudentAddress = reader["StudentAddress"].ToString();
                         studentsmodel.StudentAge = (int)reader["StudentAge"];
-
                     }
                 }
             }
-            return View(studentsmodel);
+
+            return Json(studentsmodel);
         }
+
+
+
+
+
+        //[HttpPost]
+        //public IActionResult UpdateStudent(int studentid)
+        //{
+        //    StudentsModel studentsmodel = null;
+
+        //    const string querystring = "UPDATE students SET StudentName = @StudentName, StudentAddress = @StudentAddress, StudentAge = @StudentAge WHERE StudentId = @StudentId;";
+
+        //    using (MySqlConnection connection = new MySqlConnection(connectionString))
+        //    {
+        //        using (MySqlCommand command = new MySqlCommand(querystring, connection))
+        //        {
+        //            command.Parameters.AddWithValue("@studentid", studentid);
+
+        //            connection.Open();
+
+        //            MySqlDataReader reader = command.ExecuteReader();
+
+        //            while (reader.Read())
+        //            {
+        //                studentsmodel = new StudentsModel();
+
+        //                studentsmodel.StudentName = reader["StudentName"].ToString();
+        //                studentsmodel.StudentAddress = reader["StudentAddress"].ToString();
+        //                studentsmodel.StudentAge = (int)reader["StudentAge"];
+
+        //            }
+        //        }
+        //    }
+        //    return View(studentsmodel);
+        //}
 
         [HttpPost]
         public IActionResult UpdateStudent(int StudentId, StudentsModel students)
         {
             using (MySqlConnection connection = new MySqlConnection(connectionString))
             {
-                string queryString = "UPDATE students SET StudentId = @StudentId, StudentName = @StudentName, StudentAddress = @StudentAddress, StudentAge = @StudentAge WHERE StudentId = @StudentId;";
+                string queryString = "UPDATE students SET StudentName = @StudentName, StudentAddress = @StudentAddress, StudentAge = @StudentAge WHERE StudentId = @StudentId;";
 
                 using (MySqlCommand command = new MySqlCommand(queryString, connection))
                 {
@@ -126,10 +163,10 @@ namespace TestDemo1.Controllers
 
                 }
             }
-            return RedirectToAction("ViewStudents");
+            return View("ViewStudents");
         }
 
-        [HttpGet]
+        [HttpPost]
         public IActionResult DeleteStudent(int studentid)
         {
             using (MySqlConnection connection = new MySqlConnection(connectionString))
