@@ -21,13 +21,13 @@
 
                     <div class="mb-3">
                         <label for="StudentName" class="form-label">StudentName : </label>
-                        <input id="StudentName" type="text" name="StudentName" class="form-control" autocomplete="off" maxlength="30" required pattern="[a-zA-Z\s]+" title="Only alphabets and spaces are allowed" />
-
+                        <input id="StudentName" type="text" name="StudentName" class="form-control" autocomplete="off"/>
+                        <span id="StudentNameError" style="color: red; display: none; font-size: 10px;"></span>
                     </div>
 
                     <div class="form-group">
                         <label for="Standard">Standard:</label>
-                        <select id="Standard" name="Standard" class="form-control" required>
+                        <select id="Standard" name="Standard" class="form-control">
                             <option value="" disabled selected>Select</option>
                             <option value="1">1</option>
                             <option value="2">2</option>
@@ -43,7 +43,7 @@
                     </div>
                     <div class="form-group">
                         <label for="Section">Section:</label>
-                        <select id="Section" name="Section" class="form-control" required>
+                        <select id="Section" name="Section" class="form-control">
                             <option value="" disabled selected>Select</option>
                             <option value="A">A</option>
                             <option value="B">B</option>
@@ -52,28 +52,51 @@
                     </div>
                     <div class="form-group">
                         <label for="Age">Age:</label>
-                        <input id="Age" type="number" name="Age" class="form-control" autocomplete="off" min="5" max="18" required>
+                        <input id="Age" type="number" name="Age" class="form-control" autocomplete="off" >
                     </div>
                     <div class="form-group">
-                        <label for="Gender">Gender:</label>
-                        <select id="Gender" name="Gender" class="form-control" required>
-                            <option value="" disabled selected>Select</option>
-                            <option value="Male">Male</option>
-                            <option value="Female">Female</option>
-                        </select>
+                        <label>Gender:</label>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="Gender" id="Male" value="Male" >
+                            <label class="form-check-label" for="Male">
+                                Male
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="Gender" id="Female" value="Female" >
+                            <label class="form-check-label" for="Female">
+                                Female
+                            </label>
+                        </div>
                     </div>
+
                     <div class="form-group">
                         <label for="Address">Address:</label>
-                        <input id="Address" type="text" name="Address" autocomplete="off" maxlength="20" class="form-control" required>
+                        <input id="Address" type="text" name="Address" autocomplete="off" class="form-control" >
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-success" id="submitBtn" onclick="AddStandard();">Save</button>
+                        <button type="button" class="btn btn-success" id="submit" onclick="AddStandard();">Save</button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
 </div>
+
+
+@* @section scripts {
+    <script>
+        $(document).ready(function () {
+            $('#studentForm').on('submit', function (e) {
+                var isValid = validateFormFields();
+                if (!isValid) {
+                    e.preventDefault();
+                }
+            });
+        });
+    </script>
+} *@
+
 
 
 @* <<--UpdateStandardModal-->> *@
@@ -253,7 +276,8 @@ else
         var Standard = $("#Standard").val();
         var Section = $("#Section").val();
         var Age = $("#Age").val();
-        var Gender = $("#Gender").val();
+        //var Gender = $("#Gender").val();
+        var Gender = $('input[name="Gender"]:checked').val();
         var Address = $("#Address").val();
 
         var oModel = { StudentName: StudentName, Standard: Standard, Section: Section, Age: Age, Gender: Gender, Address: Address };
@@ -461,7 +485,10 @@ else
         }
     }
 
-
-
-
 </script>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
