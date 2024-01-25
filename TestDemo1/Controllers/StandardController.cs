@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using MySql.Data.MySqlClient;
 using System.Text.Json;
 using TestDemo1.Models;
@@ -9,12 +10,75 @@ namespace TestDemo1.Controllers
     {
         private readonly IConfiguration _configuration;
         private string connectionString;
+        private readonly TeacherController _teacherController;
 
-        public StandardController(IConfiguration configuration)
+        public StandardController(IConfiguration configuration, TeacherController teacherController)
         {
             _configuration = configuration;
             connectionString = _configuration.GetConnectionString("DefaultConnection");
+            _teacherController = teacherController;
+
         }
+
+        public IActionResult Create()
+        {
+            ViewBag.TeacherList = _teacherController.GetTeacherNames();
+            return View();
+        }
+
+
+
+        //public IActionResult Index()
+        //{
+        //    List<string> standards = new List<string>();
+
+        //    using (MySqlConnection connection = new MySqlConnection(connectionString))
+        //    {
+        //        connection.Open();
+
+        //        string query = "SELECT DISTINCT Standard FROM teacher";
+        //        using (MySqlCommand command = new MySqlCommand(query, connection))
+        //        {
+        //            using (MySqlDataReader reader = command.ExecuteReader())
+        //            {
+        //                while (reader.Read())
+        //                {
+        //                    standards.Add(reader["Standard"].ToString());
+        //                }
+        //            }
+        //        }
+        //    }
+
+        //    ViewBag.StandardList = new SelectList(standards);
+        //    return View();
+        //}
+
+        //public IActionResult Index()
+        //{
+        //    List<string> teacherNames = new List<string>();
+
+        //    using (MySqlConnection connection = new MySqlConnection(connectionString))
+        //    {
+        //        connection.Open();
+
+        //        string query = "SELECT DISTINCT name FROM Teacher";
+        //        using (MySqlCommand command = new MySqlCommand(query, connection))
+        //        {
+        //            using (MySqlDataReader reader = command.ExecuteReader())
+        //            {
+        //                while (reader.Read())
+        //                {
+        //                    TeacherModel teacher = new TeacherModel();
+        //                    teacher.name = (string)reader["name"];
+
+        //                }
+        //            }
+        //        }
+        //    }
+
+        //    ViewBag.TeacherList = teacherNames;
+        //    return View();
+        //}
 
         public IActionResult ViewStandard()
         {
@@ -55,13 +119,16 @@ namespace TestDemo1.Controllers
         }
 
         [HttpPost]
-        public IActionResult AddStandard([FromBody]StandardModel standard) 
+        public IActionResult AddStandard([FromBody] StandardModel standard)
         {
-            using (MySqlConnection connection = new MySqlConnection(connectionString)) 
+            // Fetch the teacher names
+            ViewBag.TeacherList = _teacherController.GetTeacherNames();
+
+            using (MySqlConnection connection = new MySqlConnection(connectionString))
             {
                 const string query = "INSERT INTO StudentStandard (StudentName, Standard, Section, Age, Gender, Address) values (@StudentName, @Standard, @Section, @Age,  @Gender, @Address);";
 
-                using (MySqlCommand command = new MySqlCommand(query, connection)) 
+                using (MySqlCommand command = new MySqlCommand(query, connection))
                 {
                     connection.Open();
 
@@ -75,8 +142,64 @@ namespace TestDemo1.Controllers
                     command.ExecuteNonQuery();
                 }
             }
-            return Json("ViewStandard");
+
+            // If you want to use the ViewBag data in the view returned after adding a standard,
+            // you should return a ViewResult instead of a JsonResult.
+            // Replace "ViewStandard" with the name of your view.
+            return View("ViewStandard");
         }
+
+
+        //[HttpPost]
+        //public IActionResult AddStandard([FromBody] StandardModel standard)
+        //{
+        //    using (MySqlConnection connection = new MySqlConnection(connectionString))
+        //    {
+        //        const string query = "INSERT INTO StudentStandard (StudentName, Standard, Section, Age, Gender, Address) values (@StudentName, @Standard, @Section, @Age,  @Gender, @Address);";
+
+        //        using (MySqlCommand command = new MySqlCommand(query, connection))
+        //        {
+        //            connection.Open();
+
+        //            command.Parameters.AddWithValue("@StudentName", standard.StudentName);
+        //            command.Parameters.AddWithValue("@Standard", standard.Standard);
+        //            command.Parameters.AddWithValue("@Section", standard.Section);
+        //            command.Parameters.AddWithValue("@Age", standard.Age);
+        //            command.Parameters.AddWithValue("@Gender", standard.Gender);
+        //            command.Parameters.AddWithValue("@Address", standard.Address);
+
+        //            command.ExecuteNonQuery();
+        //        }
+        //    }
+
+        //    // Redirect to the TeacherController with the selected standard as a query string parameter
+        //    return RedirectToAction("AddTeacher", "Teacher", new { standard = standard.Standard });
+        //}
+
+        //[HttpPost]<<---Working Code --->>
+        //public IActionResult AddStandard([FromBody] StandardModel standard)
+        //{
+
+        //    using (MySqlConnection connection = new MySqlConnection(connectionString))
+        //    {
+        //        const string query = "insert into studentstandard (StudentName, Standard, Section, Age, Gender, Address) values (@StudentName, @Standard, @Section, @Age,  @Gender, @Address);";
+
+        //        using (MySqlCommand command = new MySqlCommand(query, connection))
+        //        {
+        //            connection.Open();
+
+        //            command.Parameters.AddWithValue("@StudentName", standard.StudentName);
+        //            command.Parameters.AddWithValue("@Standard", standard.Standard);
+        //            command.Parameters.AddWithValue("@Section", standard.Section);
+        //            command.Parameters.AddWithValue("@Age", standard.Age);
+        //            command.Parameters.AddWithValue("@Gender", standard.Gender);
+        //            command.Parameters.AddWithValue("@Address", standard.Address);
+
+        //            command.ExecuteNonQuery();
+        //        }
+        //    }
+        //    return Json("ViewStandard");
+        //}
 
         [HttpGet]
         public IActionResult PopulateUpdateStandard(int studentid)

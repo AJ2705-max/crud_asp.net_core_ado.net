@@ -36,15 +36,18 @@
                 <form id="studentForm" name="addstudent">
                     <div class="form-group">
                         <label for="StudentName">Student Name:</label>
-                        <input id="StudentName" type="text" name="StudentName" autocomplete="off" maxlength="10" class="form-control" required>
+                        <input id="StudentName" type="text" name="StudentName" autocomplete="off" maxlength="10" class="form-control" required />
+                        <span id="studentName" style="color: red; display: none; font-size: 10px;"></span>
                     </div>
                     <div class="form-group">
                         <label for="StudentAddress">Student Address:</label>
-                        <input id="StudentAddress" type="text" name="StudentAddress" autocomplete="off" maxlength="10" class="form-control" required>
+                        <input id="StudentAddress" type="text" name="StudentAddress" autocomplete="off" maxlength="20" class="form-control" required />
+                        <span id="StudentAddress" style="color: red; display: none; font-size: 10px;"></span>
                     </div>
                     <div class="form-group">
                         <label for="StudentAge">Student Age:</label>
-                        <input id="StudentAge" type="number" name="StudentAge" class="form-control" autocomplete="off" min="5" max="18" required>
+                        <input id="StudentAge" type="number" name="StudentAge" class="form-control" autocomplete="off" min="5" max="18" required />
+                        <span id="StudentAge" style="color: red; display: none; font-size: 10px;"></span>
 
                     </div>
                     <!-- Add more fields as necessary -->
@@ -72,7 +75,6 @@
             <div class="modal-header">
                 <h5 class="modal-title" id="updateStudentModalLabel">Update Student Details</h5>
                 <button type="button" class="close" data-dismiss="modal">×</button>
-
             </div>
             <div class="modal-body">
                 <form>
@@ -141,16 +143,12 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                 <button type="button" onclick="UpdateStudent()" class="btn btn-success">Save changes</button>
             </div>
         </div>
     </div>
 </div>
 
-<div class="mb-3">
-    <a asp-action="addstudent" class="btn btn-info">add new student</a>
-</div>
 
 <hr />
 
@@ -303,6 +301,11 @@ else
         $(".modal").modal("hide")
     }
 
+    $('#updateStudentModal').on('click', 'button.close', function (eventObject) {
+        $('#updateStudentModal').modal('hide');
+    });
+
+
     // $(document).ready(function () {
     //     $("#submit").click(function () {
 
@@ -403,36 +406,79 @@ else
         var StudentAddress = $("#UStudentAddress").val();
         var StudentAge = $("#UStudentAge").val();
 
-        var oModel = { StudentId: StudentId, StudentName: StudentName, StudentAddress: StudentAddress, StudentAge: StudentAge };
+        if (StudentAge >= 5 && StudentAge <= 18) {
+            var oModel = { StudentId: StudentId, StudentName: StudentName, StudentAddress: StudentAddress, StudentAge: StudentAge };
 
-        var formData = new FormData();
-        for (var key in oModel) {
-            formData.append(key, oModel[key]);
-        }
-
-        $.ajax({
-            type: "POST",
-            url: "/Students/UpdateStudent/",
-            data: formData,
-            processData: false,
-            contentType: false,
-            cache: false,
-            success: function (data) {
-                if (data) {
-                    Swal.fire({
-                        title: "Good job!",
-                        text: "Data updated successfully",
-                        icon: "success",
-                        button: "Ok",
-                    });
-                }
-            },
-            error: function (errorThrown) {
-                console.log("Error updating student:", errorThrown);
-                Swal.fire("Oops", "An error occurred while updating your data, Please try again later.", "error");
+            var formData = new FormData();
+            for (var key in oModel) {
+                formData.append(key, oModel[key]);
             }
-        });
+
+            $.ajax({
+                type: "POST",
+                url: "/Students/UpdateStudent/",
+                data: formData,
+                processData: false,
+                contentType: false,
+                cache: false,
+                success: function (data) {
+                    if (data) {
+                        Swal.fire({
+                            title: "Good job!",
+                            text: "Data updated successfully",
+                            icon: "success",
+                            button: "Ok",
+                        });
+                    }
+                },
+                error: function (errorThrown) {
+                    console.log("Error updating student:", errorThrown);
+                    Swal.fire("Oops", "An error occurred while updating your data, Please try again later.", "error");
+                }
+            });
+        } else {
+            Swal.fire("Oops", "Student Age must be between 5 and 18. Please enter a valid age.", "error");
+        }
     }
+
+
+    // function UpdateStudent() {
+    //     debugger;
+    //     var StudentId = $("#UStudentId").val();
+    //     var StudentName = $("#UStudentName").val();
+    //     var StudentAddress = $("#UStudentAddress").val();
+    //     var StudentAge = $("#UStudentAge").val();
+
+    //     var oModel = { StudentId: StudentId, StudentName: StudentName, StudentAddress: StudentAddress, StudentAge: StudentAge };
+
+    //     var formData = new FormData();
+    //     for (var key in oModel) {
+    //         formData.append(key, oModel[key]);
+    //     }
+
+    //     $.ajax({
+    //         type: "POST",
+    //         url: "/Students/UpdateStudent/",
+    //         data: formData,
+    //         processData: false,
+    //         contentType: false,
+    //         cache: false,
+    //         success: function (data) {
+    //             if (data) {
+    //                 Swal.fire({
+    //                     title: "Good job!",
+    //                     text: "Data updated successfully",
+    //                     icon: "success",
+    //                     button: "Ok",
+    //                 });
+    //             }
+    //         },
+    //         error: function (errorThrown) {
+    //             console.log("Error updating student:", errorThrown);
+    //             Swal.fire("Oops", "An error occurred while updating your data, Please try again later.", "error");
+    //         }
+    //     });
+    // }
 
 
     function ViewStudents() {
@@ -668,6 +714,113 @@ else
     //     })
     // }
 
+    $(function () {
+        // Initialize form validation on the student registration form.
+        $("form[name='addstudent']").validate({
+            // Specify validation rules
+            rules: {
+                
+                studentName: {
+                    required: true,
+                    maxlength: 10
+                },
+                studentAddress: {
+                    required: true,
+                    maxlength: 20
+                },
+                studentAge: {
+                    required: true,
+                    digits: true
+                   
+                }
+            },
+            // validation error messages
+            messages: {
+                studentName: {
+                    required: "Please provide a Student Name!",
+                    maxlength: "Student Name must be at max 10 characters long"
+                },
+                studentAddress: {
+                    required: "Please provide a Student Address!",
+                    maxlength: "Student Address must be at max 20 characters long"
+                },
+                studentAge: {
+                    required: "Please provide a Student Age!",
+                    digits: "Student Age must be a valid number"
+                }
+            },
+
+            errorClass: "error", 
+            errorElement: "div",
+ 
+            submitHandler: function (form) {
+                form.submit();
+            }
+        });
+
+        $("#saveBtn").on("click", function () {
+            validator.form();  // This triggers the validation
+        });
+
+       
+        $("form[name='addstudent'] input").on("blur", function () {
+            $("form[name='addstudent']").validate().element($(this));
+        });
+    });
+
+
+    $(function () {
+        // Initialize form validation on the student update form.
+        var validator = $("#updateStudentModal form").validate({
+            // Specify validation rules
+            rules: {
+                UStudentName: {
+                    required: true,
+                    maxlength: 10
+                },
+                UStudentAddress: {
+                    required: true,
+                    maxlength: 20
+                },
+                UStudentAge: {
+                    required: true,
+                    digits: true,
+                    min: 5,
+                    max: 18
+                }
+            },
+            // validation error messages
+            messages: {
+                UStudentName: {
+                    required: "Please provide a Student Name!",
+                    maxlength: "Student Name must be at max 10 characters long"
+                },
+                UStudentAddress: {
+                    required: "Please provide a Student Address!",
+                    maxlength: "Student Address must be at max 20 characters long"
+                },
+                UStudentAge: {
+                    required: "Please provide a Student Age!",
+                    digits: "Student Age must between 5 to 18"
+                }
+            },
+
+            errorClass: "error",
+            errorElement: "div",
+
+            submitHandler: function (form) {
+                form.submit();
+            }
+        });
+
+        $("#updateButton").on("click", function () {
+            validator.form();  // This triggers the validation
+        });
+
+        $("#updateStudentModal form input").on("blur", function () {
+            $("#updateStudentModal form").validate().element($(this));
+        });
+    });
 
 
 

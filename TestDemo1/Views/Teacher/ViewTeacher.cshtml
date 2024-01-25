@@ -1,0 +1,186 @@
+﻿@model IEnumerable<TestDemo1.Models.TeacherModel>
+
+@{
+    ViewData["title"] = "TEACHER DETAILS";
+}
+<H2>@ViewData["title"]</H2>
+
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#teacherModal">
+    AddTeacher
+</button>
+
+
+<div class="modal" id="teacherModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">Add Teacher Details</h4>
+                <button type="button" class="close" data-dismiss="modal">×</button>
+            </div>
+
+            <!-- Modal Body -->
+            <div class="modal-body">
+                <form id="teacherForm" name="addteacher">
+                    <div class="form-group">
+                        <label for="teacherName">Teacher Name:</label>
+                        <input id="teacherName" type="text" name="teacherName" autocomplete="off" maxlength="10" class="form-control" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="Standard">Standard:</label>
+                        <select id="Standard" name="Standard" class="form-control">
+                            <option value="" disabled selected>Select</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                            <option value="7">7</option>
+                            <option value="8">8</option>
+                            <option value="9">9</option>
+                            <option value="10">10</option>
+                        </select>
+                    </div>
+                    <!-- Add more fields as necessary -->
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-success" id="saveBtn" onclick="AddTeacher()">Save</button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+@if (Model != null)
+{
+
+    <table class="table" id="standard-table">
+
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>TeacherName</th>
+                <th>Standard</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(modelItem => item.id)</td>
+                    <td>@Html.DisplayFor(modelItem => item.teacherName)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Standard)</td>
+                    <td>
+
+                        <a class="btn btn-info" onclick="GetStudentStandard(@item.id)" data-bs-toggle="modal" data-bs-target="#addteacher">Update</a>
+                        @*  <a class="btn btn-primary" onclick="ViewStudents(@item.StudentId)" data-bs-toggle="modal" data-bs-target="#viewStudentModal">View</a> *@
+                        <a class="btn btn-danger" onclick="DeleteStandard(@item.id)">Delete</a>
+
+
+
+                        @*  <a class="btn btn-success" asp-action="updatestudent" asp-route-studentid="@item.studentid">update</a>
+                <a class="btn btn-danger" asp-action="deletestudent" asp-route-studentid="@item.studentid">delete</a> |
+                *@
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <h2>No Data Available</h2>
+}
+
+<script>
+
+    function openModal() {
+        $(".modal").modal("show")
+    }
+
+    $('#teacherModal').on('click', 'button.close', function (eventObject) {
+        $('#teacherModal').modal('hide');
+    });
+
+
+    function AddTeacher() {
+        var id = $("#id").val();
+        var teacherName = $("#teacherName").val();
+        var Standard = $("#Standard").val();
+
+        var oModel = { id: id, teacherName: teacherName, Standard: Standard };
+
+        $.ajax({
+            type: "POST",
+            url: "/Teacher/AddTeacher",
+            contentType: "application/json",
+            data: JSON.stringify(oModel),
+            dataType: 'json',
+            cache: false,
+            async: false,
+            success: function (data) {
+                Swal.fire({
+                    title: "Good job!",
+                    text: "Data updated successfully",
+                    icon: "success",
+                    confirmButtonText: "Ok",
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        location.reload();
+                    }
+                });
+            },
+
+            error: function (errorThrown) {
+                console.log("Error saving teacher:", errorThrown);
+                Swal.fire("Oops", "An error occurred while saving your data, Please try again later.", "error");
+            }
+        });
+    }
+
+    // function AssignStudentStandardToTeacher() {
+    //     var studentId = $("#studentId").val();
+    //     var teacherId = $("#teacherId").val();
+
+    //     // Assuming getStudentStandard is a function that retrieves the standard of a student from the StandardModel
+    //     var studentStandard = getStudentStandard(studentId);
+
+    //     var oModel = { id: teacherId, Standard: studentStandard };
+
+    //     $.ajax({
+    //         type: "POST",
+    //         url: "/Teacher/GetStudentStandard",
+    //         contentType: "application/json",
+    //         data: JSON.stringify(oModel),
+    //         dataType: 'json',
+    //         cache: false,
+    //         async: false,
+    //         success: function (data) {
+    //             Swal.fire({
+    //                 title: "Good job!",
+    //                 text: "Teacher's standard updated successfully",
+    //                 icon: "success",
+    //                 confirmButtonText: "Ok",
+    //             }).then((result) => {
+    //                 if (result.isConfirmed) {
+    //                     location.reload();
+    //                 }
+    //             });
+    //         },
+
+    //         error: function (errorThrown) {
+    //             console.log("Error updating teacher's standard:", errorThrown);
+    //             Swal.fire("Oops", "An error occurred while updating your data, Please try again later.", "error");
+    //         }
+    //     });
+    // }
+
+  
+
+
+
+</script>

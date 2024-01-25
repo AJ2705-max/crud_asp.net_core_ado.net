@@ -26,6 +26,25 @@
                     </div>
 
                     <div class="form-group">
+                        <label for="teacherName">TeacherName:</label>
+                        <select id="teacherName" name="teacherName" class="form-control">
+                            <option value="" disabled selected>Select</option>
+
+                            @if (ViewBag.TeacherList != null)
+                            {
+                                foreach (var teacherName in ViewBag.TeacherList)
+                                {
+                                    <option value="@teacherName">@teacherName</option>
+                                }
+                            }
+                            else
+                            {
+                                <option value="" disabled>No teachers available</option>
+                            }
+                        </select>
+                    </div>
+
+                    <div class="form-group">
                         <label for="Standard">Standard:</label>
                         <select id="Standard" name="Standard" class="form-control">
                             <option value="" disabled selected>Select</option>
@@ -84,18 +103,6 @@
 </div>
 
 
-@* @section scripts {
-    <script>
-        $(document).ready(function () {
-            $('#studentForm').on('submit', function (e) {
-                var isValid = validateFormFields();
-                if (!isValid) {
-                    e.preventDefault();
-                }
-            });
-        });
-    </script>
-} *@
 
 
 
@@ -106,7 +113,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h4 class="modal-title">Update Standard Details</h4>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="close" data-dismiss="modal">×</button>
             </div>
             <div class="modal-body">
                 <form>
@@ -163,6 +170,7 @@
             <tr>
                 <th>Student Id</th>
                 <th>Student Name</th>
+                <th>Teacher Name</th>
                 <th>Standard</th>
                 <th>Section</th>
                 <th>Age</th>
@@ -177,6 +185,7 @@
                 <tr>
                     <td>@Html.DisplayFor(modelItem => item.StudentId)</td>
                     <td>@Html.DisplayFor(modelItem => item.StudentName)</td>
+                    <td>@Html.DisplayFor(modelItem => item.TeacherName)</td>
                     <td>@Html.DisplayFor(modelItem => item.Standard)</td>
                     <td>@Html.DisplayFor(modelItem => item.Section)</td>
                     <td>@Html.DisplayFor(modelItem => item.Age)</td>
@@ -213,6 +222,80 @@ else
     function openModal() { 
     $(".modal").modal("show")
 }
+
+    $('#updateStandardModal').on('click', 'button.close', function (eventObject) {
+        $('#updateStandardModal').modal('hide');
+    });
+
+    function validateForm() {
+        var StudentName = $("#StudentName").val();
+        var Standard = $("#Standard").val();
+        var Section = $("#Section").val();
+        var Age = $("#Age").val();
+        var Gender = $('input[name="Gender"]:checked').val();
+        var Address = $("#Address").val();
+
+        // Check if fields are empty
+        if (StudentName == "" || Standard == "" || Section == "" || Age == "" || Gender == "" || Address == "") {
+            alert("All fields must be filled out");
+            return false;
+        }
+
+        // Check if age is a number
+        if (isNaN(Age) || Age < 1) {
+            alert("Please enter a valid age");
+            return false;
+        }
+
+        // If everything is fine
+        return true;
+    }
+
+    function AddStandard() {
+        debugger;
+
+        // Validate the form
+        if (!validateForm()) {
+            return;
+        }
+
+        var StudentName = $("#StudentName").val();
+        var Standard = $("#Standard").val();
+        var Section = $("#Section").val();
+        var Age = $("#Age").val();
+        var Gender = $('input[name="Gender"]:checked').val();
+        var Address = $("#Address").val();
+
+        var oModel = { StudentName: StudentName, Standard: Standard, Section: Section, Age: Age, Gender: Gender, Address: Address };
+
+        $.ajax({
+            type: "POST",
+            url: "/Standard/AddStandard",
+            contentType: "application/json",
+            data: JSON.stringify(oModel),
+            dataType: 'json',
+            cache: false,
+            async: false,
+            success: function (data) {
+                Swal.fire({
+                    title: "Good job!",
+                    text: "Data updated successfully",
+                    icon: "success",
+                    confirmButtonText: "Ok",
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        location.reload();
+                    }
+                });
+            },
+
+            error: function (errorThrown) {
+                console.log("Error saving employee:", errorThrown);
+                Swal.fire("Oops", "An error occurred while saving your data, Please try again later.", "error");
+            }
+        });
+    }
+
 
 
     // $(document).ready(function () {
@@ -270,46 +353,46 @@ else
     //     });
     // }
 
-    function AddStandard() {
-        debugger;
-        var StudentName = $("#StudentName").val();
-        var Standard = $("#Standard").val();
-        var Section = $("#Section").val();
-        var Age = $("#Age").val();
-        //var Gender = $("#Gender").val();
-        var Gender = $('input[name="Gender"]:checked').val();
-        var Address = $("#Address").val();
+    // function AddStandard() {    <<--Working code-->>
+    //     debugger;
+    //     var StudentName = $("#StudentName").val();
+    //     var Standard = $("#Standard").val();
+    //     var Section = $("#Section").val();
+    //     var Age = $("#Age").val();
+    //     //var Gender = $("#Gender").val();
+    //     var Gender = $('input[name="Gender"]:checked').val();
+    //     var Address = $("#Address").val();
 
-        var oModel = { StudentName: StudentName, Standard: Standard, Section: Section, Age: Age, Gender: Gender, Address: Address };
+    //     var oModel = { StudentName: StudentName, Standard: Standard, Section: Section, Age: Age, Gender: Gender, Address: Address };
 
-        $.ajax({
-            type: "POST",
-            url: "/Standard/AddStandard",
-           // data: formData,
-            contentType: "application/json",
-            data: JSON.stringify(oModel),
-            dataType: 'json',
-             cache: false,
-             async: false,
-            success: function (data) {
-                Swal.fire({
-                    title: "Good job!",
-                    text: "Data updated successfully",
-                    icon: "success",
-                    confirmButtonText: "Ok",
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        location.reload();
-                    }
-                });
-            },
+    //     $.ajax({
+    //         type: "POST",
+    //         url: "/Standard/AddStandard",
+    //        // data: formData,
+    //         contentType: "application/json",
+    //         data: JSON.stringify(oModel),
+    //         dataType: 'json',
+    //          cache: false,
+    //          async: false,
+    //         success: function (data) {
+    //             Swal.fire({
+    //                 title: "Good job!",
+    //                 text: "Data updated successfully",
+    //                 icon: "success",
+    //                 confirmButtonText: "Ok",
+    //             }).then((result) => {
+    //                 if (result.isConfirmed) {
+    //                     location.reload();
+    //                 }
+    //             });
+    //         },
 
-            error: function (errorThrown) {
-                console.log("Error saving employee:", errorThrown);
-                Swal.fire("Oops", "An error occurred while saving your data, Please try again later.", "error");
-            }
-        });
-    }
+    //         error: function (errorThrown) {
+    //             console.log("Error saving employee:", errorThrown);
+    //             Swal.fire("Oops", "An error occurred while saving your data, Please try again later.", "error");
+    //         }
+    //     });
+    // }
 
     function PopulateUpdateStandard(StudentId) {
         debugger;
@@ -484,6 +567,26 @@ else
             });
         }
     }
+
+    $(document).ready(function () {
+        $.ajax({
+            url: '/Teacher/GetTeacherNames',
+            type: 'GET',
+            dataType: 'json',
+            success: function (data) {
+                var dropdown = $('#teacherName');
+                dropdown.empty();
+                $.each(data, function (i, teacherName) {
+                    dropdown.append($('<option></option>').attr('value', teacherName).text(teacherName));
+                });
+            },
+            error: function () {
+                alert('Error occurred while loading teacher names.');
+            }
+        });
+        //debugger;
+    });
+
 
 </script>
 

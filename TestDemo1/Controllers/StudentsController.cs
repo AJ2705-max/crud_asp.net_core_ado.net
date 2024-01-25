@@ -52,29 +52,58 @@ namespace TestDemo1.Controllers
         {
             return View();
         }
-
         [HttpPost]
         public IActionResult AddStudent(StudentsModel student)
         {
-
-            using (MySqlConnection connection = new MySqlConnection(connectionString))
+            if (ModelState.IsValid)
             {
-                const string query = "INSERT INTO Students (StudentName, StudentAddress, StudentAge) values (@StudentName, @StudentAddress, @StudentAge);";
-
-                using (MySqlCommand command = new MySqlCommand(query, connection))
+                using (MySqlConnection connection = new MySqlConnection(connectionString))
                 {
-                    connection.Open();
+                    const string query = "INSERT INTO Students (StudentName, StudentAddress, StudentAge) values (@StudentName, @StudentAddress, @StudentAge);";
 
-                    command.Parameters.AddWithValue("@StudentName", student.StudentName);
-                    command.Parameters.AddWithValue("@StudentAddress", student.StudentAddress);
-                    command.Parameters.AddWithValue("@StudentAge", student.StudentAge);
+                    using (MySqlCommand command = new MySqlCommand(query, connection))
+                    {
+                        connection.Open();
 
-                    command.ExecuteNonQuery();
+                        command.Parameters.AddWithValue("@StudentName", student.StudentName);
+                        command.Parameters.AddWithValue("@StudentAddress", student.StudentAddress);
+                        command.Parameters.AddWithValue("@StudentAge", student.StudentAge);
 
+                        command.ExecuteNonQuery();
+                    }
                 }
+                return Json("ViewStudents");
             }
-            return Json("ViewStudents");
+            else
+            {
+                // If model state is not valid, return the view with the model to display validation error messages
+                return View(student);
+            }
         }
+
+
+        //[HttpPost]
+        //public IActionResult AddStudent(StudentsModel student)
+        //{
+
+        //    using (MySqlConnection connection = new MySqlConnection(connectionString))
+        //    {
+        //        const string query = "INSERT INTO Students (StudentName, StudentAddress, StudentAge) values (@StudentName, @StudentAddress, @StudentAge);";
+
+        //        using (MySqlCommand command = new MySqlCommand(query, connection))
+        //        {
+        //            connection.Open();
+
+        //            command.Parameters.AddWithValue("@StudentName", student.StudentName);
+        //            command.Parameters.AddWithValue("@StudentAddress", student.StudentAddress);
+        //            command.Parameters.AddWithValue("@StudentAge", student.StudentAge);
+
+        //            command.ExecuteNonQuery();
+
+        //        }
+        //    }
+        //    return Json("ViewStudents");
+        //}
 
         [HttpGet]
         public IActionResult PopulateUpdateStudent(int studentid)
@@ -110,61 +139,61 @@ namespace TestDemo1.Controllers
 
 
 
+        [HttpPost]
+        public IActionResult UpdateStudent(StudentsModel student)
+        {
+            if (ModelState.IsValid)
+            {
+                using (MySqlConnection connection = new MySqlConnection(connectionString))
+                {
+                    string query = "UPDATE Students SET StudentName = @StudentName, StudentAddress = @StudentAddress, StudentAge = @StudentAge WHERE StudentId = @StudentId;";
+
+                    using (MySqlCommand command = new MySqlCommand(query, connection))
+                    {
+                        connection.Open();
+
+                        command.Parameters.AddWithValue("@StudentId", student.StudentId);
+                        command.Parameters.AddWithValue("@StudentName", student.StudentName);
+                        command.Parameters.AddWithValue("@StudentAddress", student.StudentAddress);
+                        command.Parameters.AddWithValue("@StudentAge", student.StudentAge);
+
+                        command.ExecuteNonQuery();
+                    }
+                }
+                return Json("ViewStudents");
+            }
+            else
+            {
+                // If model state is not valid, return the view with the model to display validation error messages
+                return View(student);
+            }
+        }
+
+
 
 
         //[HttpPost]
-        //public IActionResult UpdateStudent(int studentid)
+        //public IActionResult UpdateStudent(int StudentId, StudentsModel students)
         //{
-        //    StudentsModel studentsmodel = null;
-
-        //    const string querystring = "UPDATE students SET StudentName = @StudentName, StudentAddress = @StudentAddress, StudentAge = @StudentAge WHERE StudentId = @StudentId;";
-
         //    using (MySqlConnection connection = new MySqlConnection(connectionString))
         //    {
-        //        using (MySqlCommand command = new MySqlCommand(querystring, connection))
+        //        string queryString = "UPDATE students SET StudentName = @StudentName, StudentAddress = @StudentAddress, StudentAge = @StudentAge WHERE StudentId = @StudentId;";
+
+        //        using (MySqlCommand command = new MySqlCommand(queryString, connection))
         //        {
-        //            command.Parameters.AddWithValue("@studentid", studentid);
+        //            command.Parameters.AddWithValue("@StudentId", students.StudentId);
+        //            command.Parameters.AddWithValue("@StudentName", students.StudentName);
+        //            command.Parameters.AddWithValue("@StudentAddress", students.StudentAddress);
+        //            command.Parameters.AddWithValue("@StudentAge", students.StudentAge);
 
         //            connection.Open();
 
-        //            MySqlDataReader reader = command.ExecuteReader();
+        //            command.ExecuteNonQuery();
 
-        //            while (reader.Read())
-        //            {
-        //                studentsmodel = new StudentsModel();
-
-        //                studentsmodel.StudentName = reader["StudentName"].ToString();
-        //                studentsmodel.StudentAddress = reader["StudentAddress"].ToString();
-        //                studentsmodel.StudentAge = (int)reader["StudentAge"];
-
-        //            }
         //        }
         //    }
-        //    return View(studentsmodel);
+        //    return View("ViewStudents");
         //}
-
-        [HttpPost]
-        public IActionResult UpdateStudent(int StudentId, StudentsModel students)
-        {
-            using (MySqlConnection connection = new MySqlConnection(connectionString))
-            {
-                string queryString = "UPDATE students SET StudentName = @StudentName, StudentAddress = @StudentAddress, StudentAge = @StudentAge WHERE StudentId = @StudentId;";
-
-                using (MySqlCommand command = new MySqlCommand(queryString, connection))
-                {
-                    command.Parameters.AddWithValue("@StudentId", students.StudentId);
-                    command.Parameters.AddWithValue("@StudentName", students.StudentName);
-                    command.Parameters.AddWithValue("@StudentAddress", students.StudentAddress);
-                    command.Parameters.AddWithValue("@StudentAge", students.StudentAge);
-
-                    connection.Open();
-
-                    command.ExecuteNonQuery();
-
-                }
-            }
-            return View("ViewStudents");
-        }
 
         [HttpPost]
         public IActionResult DeleteStudent(int studentid)
