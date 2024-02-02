@@ -1,0 +1,72 @@
+
+
+select * from students;
+
+SELECT * FROM students WHERE StudentId = 1;
+
+
+CREATE TABLE StudentStandard (
+    StudentId INT AUTO_INCREMENT PRIMARY KEY,
+    StudentName VARCHAR(100),
+    Standard INT,
+    Section VARCHAR(255),
+    Age INT,
+    Gender VARCHAR(255),
+    Address VARCHAR(255)
+);
+
+CREATE TABLE teacher
+(
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    teacherName VARCHAR(255) NOT NULL,
+    Standard VARCHAR(255) NOT NULL
+);
+
+
+drop table StudentStandard;
+
+INSERT INTO StudentStandard (StudentName, Standard, Section, Age, Gender, Address)
+VALUES ('John Doe', 10, 'A', 15, 'Male', '123 Main St');
+
+
+select * from StudentStandard where Standard ="5" and Section ="A";
+
+truncate table StudentStandard;
+
+DROP table StudentStandard;
+
+
+
+
+DELIMITER //
+CREATE PROCEDURE GetAllTeacherNames()
+BEGIN
+	SELECT teacherName FROM teacher;
+END //
+DELIMITER ;
+
+
+select * from teacher;
+drop table teacher;
+truncate table teacher;
+
+ALTER TABLE teacher
+ADD COLUMN StudentId INT,
+ADD FOREIGN KEY (StudentId) REFERENCES StudentStandard(StudentId);
+
+
+SELECT teacher.name, teacher.id, studentstandard.Standard
+FROM studentstandard
+INNER JOIN teacher ON studentstandard.Standard=teacher.Standard;
+
+select StudentId,Standard from studentstandard;
+
+
+
+
+DELIMITER //
+CREATE PROCEDURE GetAllTeacherNames()
+BEGIN
+    SELECT teacherName FROM teacher;
+END //
+DELIMITER ;
