@@ -9,14 +9,26 @@ namespace TestDemo1.Controllers
     public class TeacherController : Controller
     {
         private readonly IConfiguration _configuration;
-        private readonly TeacherController _teacherController;
+        private readonly ITeacherService _teacherService;
         private string connectionString;
-        public TeacherController(IConfiguration configuration)
+      
+        
+        public TeacherController( IConfiguration configuration, ITeacherService teacherService)
         {
+            teacherService = _teacherService;
             _configuration = configuration;
             connectionString = _configuration.GetConnectionString("DefaultConnection");
             
         }
+
+        public IActionResult Create(ITeacherService teacherService)
+        {
+            teacherService.AddStandard(teacherService);
+            ViewBag.TeacherList = teacherService.GetTeacherNames();
+            return View();
+        }
+
+        
 
         public List<string> GetTeacherNames()
         {
@@ -106,7 +118,7 @@ namespace TestDemo1.Controllers
         }
 
         [HttpPost]
-        public IActionResult AddTeacher([FromBody] TeacherModel teacher, string standard)
+        public IActionResult AddTeacher([FromBody] TeacherModel teacher, StandardModel standard)
         {
             using (MySqlConnection connection = new MySqlConnection(connectionString))
             {

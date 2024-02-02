@@ -4,12 +4,11 @@ namespace TestDemo1.Models
 {
     public class StandardModel
     {
-        public int StudentId { get; set; }
+       // public int StudentId { get; set; }
 
-        
         public string StudentName { get; set; }
 
-        public string TeacherName { get; set; } 
+        public string teacherName { get; set; }
 
         public string Standard { get; set; }
 

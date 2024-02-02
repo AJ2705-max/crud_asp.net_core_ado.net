@@ -82,28 +82,7 @@ namespace TestDemo1.Controllers
         }
 
 
-        //[HttpPost]
-        //public IActionResult AddStudent(StudentsModel student)
-        //{
-
-        //    using (MySqlConnection connection = new MySqlConnection(connectionString))
-        //    {
-        //        const string query = "INSERT INTO Students (StudentName, StudentAddress, StudentAge) values (@StudentName, @StudentAddress, @StudentAge);";
-
-        //        using (MySqlCommand command = new MySqlCommand(query, connection))
-        //        {
-        //            connection.Open();
-
-        //            command.Parameters.AddWithValue("@StudentName", student.StudentName);
-        //            command.Parameters.AddWithValue("@StudentAddress", student.StudentAddress);
-        //            command.Parameters.AddWithValue("@StudentAge", student.StudentAge);
-
-        //            command.ExecuteNonQuery();
-
-        //        }
-        //    }
-        //    return Json("ViewStudents");
-        //}
+       
 
         [HttpGet]
         public IActionResult PopulateUpdateStudent(int studentid)
@@ -164,36 +143,11 @@ namespace TestDemo1.Controllers
             }
             else
             {
-                // If model state is not valid, return the view with the model to display validation error messages
+               
                 return View(student);
             }
         }
 
-
-
-
-        //[HttpPost]
-        //public IActionResult UpdateStudent(int StudentId, StudentsModel students)
-        //{
-        //    using (MySqlConnection connection = new MySqlConnection(connectionString))
-        //    {
-        //        string queryString = "UPDATE students SET StudentName = @StudentName, StudentAddress = @StudentAddress, StudentAge = @StudentAge WHERE StudentId = @StudentId;";
-
-        //        using (MySqlCommand command = new MySqlCommand(queryString, connection))
-        //        {
-        //            command.Parameters.AddWithValue("@StudentId", students.StudentId);
-        //            command.Parameters.AddWithValue("@StudentName", students.StudentName);
-        //            command.Parameters.AddWithValue("@StudentAddress", students.StudentAddress);
-        //            command.Parameters.AddWithValue("@StudentAge", students.StudentAge);
-
-        //            connection.Open();
-
-        //            command.ExecuteNonQuery();
-
-        //        }
-        //    }
-        //    return View("ViewStudents");
-        //}
 
         [HttpPost]
         public IActionResult DeleteStudent(int studentid)
@@ -212,32 +166,6 @@ namespace TestDemo1.Controllers
                 }
             }
             return RedirectToAction("ViewStudents");
-        }
-
-
-        //[HttpPost]
-        //public IActionResult DeleteStudent(int StudentId, StudentsModel students) 
-        //{
-        //    using (MySqlConnection connection = new MySqlConnection(connectionString)) 
-        //    {
-        //        string queryString = "DELETE FROM students WHERE StudentId = @StudentId;";
-
-        //        using (MySqlCommand command = new MySqlCommand(queryString, connection)) 
-        //        {
-        //            command.Parameters.AddWithValue("@StudentId", students.StudentId);
-        //            command.Parameters.AddWithValue("@StudentName", students.StudentName);
-        //            command.Parameters.AddWithValue("@StudentAddress", students.StudentAddress);
-        //            command.Parameters.AddWithValue("@StudentAge", students.StudentAge);
-
-        //            connection.Open();
-
-        //            command.ExecuteNonQuery();
-        //        }
-        //    }
-        //    return RedirectToAction("ViewStudents");
-        //}
-
-
-
+        }     
     }
 }

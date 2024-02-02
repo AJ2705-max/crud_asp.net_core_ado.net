@@ -168,7 +168,7 @@
 
         <thead>
             <tr>
-               @*  <th>Student Id</th> *@
+                <th>Student Id</th>
                 <th>Student Name</th>
                 <th>TeacherName</th>
                 <th>Standard</th>
@@ -183,9 +183,9 @@
             @foreach (var item in Model)
             {
                 <tr>
-                    @* <td>@Html.DisplayFor(modelItem => item.StudentId)</td> *@
+                    <td>@Html.DisplayFor(modelItem => item.StudentId)</td>
                     <td>@Html.DisplayFor(modelItem => item.StudentName)</td>
-                    <td>@Html.DisplayFor(modelItem => item.teacherName)</td>
+                    <td>@Html.DisplayFor(modelItem => item.TeacherName)</td>
                     <td>@Html.DisplayFor(modelItem => item.Standard)</td>
                     <td>@Html.DisplayFor(modelItem => item.Section)</td>
                     <td>@Html.DisplayFor(modelItem => item.Age)</td>
@@ -193,9 +193,9 @@
                     <td>@Html.DisplayFor(modelItem => item.Address)</td>
                     <td>
 
-                       @*  <a class="btn btn-info" onclick="PopulateUpdateStandard(@item.StudentId)" data-bs-toggle="modal" data-bs-target="#updateStandardModal">Update</a> *@
+                        <a class="btn btn-info" onclick="PopulateUpdateStandard(@item.StudentId)" data-bs-toggle="modal" data-bs-target="#updateStandardModal">Update</a>
                         @*  <a class="btn btn-primary" onclick="ViewStudents(@item.StudentId)" data-bs-toggle="modal" data-bs-target="#viewStudentModal">View</a> *@
-                       @*  <a class="btn btn-danger" onclick="DeleteStandard(@item.StudentId)">Delete</a> *@
+                        <a class="btn btn-danger" onclick="DeleteStandard(@item.StudentId)">Delete</a>
 
 
 
@@ -259,86 +259,24 @@ else
             return;
         }
 
-        var standardDetails = {
-          //  StudentId: $("#StudentId").val(),
-            StudentName: $("#StudentName").val(),
-            teacherName: $("#teacherName").val(),
-            Standard: $("#Standard").val(),
-            Section: $("#Section").val(),
-            Age: $("#Age").val(),
-            Gender: $('input[name="Gender"]:checked').val(),
-            Address: $("#Address").val()
-        }
+        var StudentName = $("#StudentName").val();
+        var teacherName = $("#teacherName").val();
+        var Standard = $("#Standard").val();
+        var Section = $("#Section").val();
+        var Age = $("#Age").val();
+        var Gender = $('input[name="Gender"]:checked').val();
+        var Address = $("#Address").val();
 
-        var formData = new FormData();
-        for (var key in standardDetails) {
-            formData.append(key, standardDetails[key]);
-        }
+        var oModel = {
+            StudentName: StudentName,
+            teacherName: teacherName,
+            Standard: Standard,
+            Section: Section,
+            Age: Age,
+            Gender: Gender,
+            Address: Address
+        };
 
-        $.ajax({
-            type: "POST",
-            url: "/Standard/AddStandard",
-            data: formData,
-            contentType: false,
-            processData: false,
-            cache: false,
-            success: function (data) {
-                if (data.status === "success") {
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Success',
-                        text: data.message
-                    });
-                }
-                window.location.href = '/Standard/ViewStandard';
-            },
-            error: function (error) {
-                console.log("Error, when saving standard:", error);
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: 'An error occurred. Please try again.'
-                });
-            }
-        });
-    }
-
-
-    // function AddStandard() {
-    //     debugger;
-
-    //     if (!validateForm()) {
-    //         return;
-    //     }
-
-    //     var StudentName = $("#StudentName").val();
-    //     var teacherName = $("#teacherName").val();
-    //     var Standard = $("#Standard").val();
-    //     var Section = $("#Section").val();
-    //     var Age = $("#Age").val();
-    //     var Gender = $('input[name="Gender"]:checked').val();
-    //     var Address = $("#Address").val();
-
-    //     var oModel = {
-    //         StudentName:this.StudentName,
-    //         teacherName: this.teacherName,
-    //         Standard: this.Standard,
-    //         Section: this.Section,
-    //         Age: this.Age,
-    //         Gender: this.Gender,
-    //         Address: this.Address
-    //     };
-
-        // var oModel = {
-        //     StudentName = $("#StudentName").val(),
-        //     teacherName = $("#teacherName").val(),
-        //     Standard = $("#Standard").val(),
-        //     Section = $("#Section").val(),
-        //     Age = $("#Age").val(),
-        //     Gender = $('input[name="Gender"]:checked').val(),
-        //     Address = $("#Address").val(),
-        // }
-        debugger;
         // $.ajax({
         //     type: "POST",
         //     url: "/Standard/AddStandard",
@@ -348,30 +286,34 @@ else
         //     cache: false,
         //     success: function (data) {
 
-    //     var formData = new FormData();
-    //     formData.append("standard", JSON.stringify(oModel));
-    //     $.ajax({
-    //         type: "POST",
-    //         url: "/Standard/AddStandard",
-    //         contentType: "application/json",
-    //         data: JSON.stringify(oModel),
-    //         dataType: 'json',
-    //         cache: false,
-    //         async: false,
-    //         success: function (data) {
-    //             Swal.fire({
-    //                 title: "Good job!",
-    //                 text: "Data inserted successfully",
-    //                 icon: "success",
-    //                 button: "Ok",
-    //             });
-    //         },
-    //         error: function (errorThrown) {
-    //             console.log("Error saving data:", errorThrown);
-    //             Swal.fire("Oops", "An error occurred while saving your data, Please try again later.", "error");
-    //         }
-    //     });
-    // }
+        var formData = new FormData();
+        // formData.append("Id", studentID.StudentId);
+        formData.append("standard", JSON.stringify(oModel));
+        $.ajax({
+            type: "POST",
+            url: "/Standard/AddStandard",
+            data: formData,
+            // contentType: "application/json",
+            // dataType: 'json',
+            // cache: false,
+            // async: false,
+            processData: false,
+            contentType: false,
+            cache: false,
+            success: function (data) {
+                Swal.fire({
+                    title: "Good job!",
+                    text: "Data inserted successfully",
+                    icon: "success",
+                    button: "Ok",
+                });
+            },
+            error: function (errorThrown) {
+                console.log("Error saving data:", errorThrown);
+                Swal.fire("Oops", "An error occurred while saving your data, Please try again later.", "error");
+            }
+        });
+    }
 
 
 
