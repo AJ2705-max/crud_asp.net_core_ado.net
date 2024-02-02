@@ -2,7 +2,7 @@
 using TestDemo1.Controllers;
 using TestDemo1.Models;
 
-public class teacherService : ITeacherService
+public class TeacherService : ITeacherService
 {
     private readonly string _connectionString;
 
@@ -15,7 +15,7 @@ public class teacherService : ITeacherService
     public string Address { get; set; }
     
 
-    public teacherService(IConfiguration configuration)
+    public TeacherService(IConfiguration configuration)
     {
         _connectionString = configuration.GetConnectionString("DefaultConnection");
     }

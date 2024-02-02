@@ -76,7 +76,7 @@ namespace TestDemo1.Controllers
                     while (reader.Read())
                     {
                         StandardModel standard = new StandardModel();
-                       // standard.StudentId = (int)reader["StudentId"];
+                        standard.StudentId = (int)reader["StudentId"];
                         standard.StudentName = reader["StudentName"].ToString();
                         standard.teacherName = reader["teacherName"].ToString();
                         standard.Standard = reader["Standard"].ToString();
@@ -188,12 +188,12 @@ namespace TestDemo1.Controllers
         //}
 
         [HttpPost]
-        public IActionResult AddStandard( StandardModel standardModel)
+        public IActionResult AddStandard( StandardModel standardModel )
         {
 
             //StandardModel standards = JsonSerializer.Deserialize<StandardModel>(standard)!;
 
-            standardModel.teacherName = _teacherService.GetTeacherNames();
+            //standardModel.teacherName = _teacherService.GetTeacherNames();
 
             using (MySqlConnection connection = new MySqlConnection(connectionString))
             {
@@ -203,8 +203,9 @@ namespace TestDemo1.Controllers
                 {
                     connection.Open();
 
+                   // command.Parameters.AddWithValue("@StudentId", standardModel.StudentId);
                     command.Parameters.AddWithValue("@StudentName", standardModel.StudentName);
-                    command.Parameters.AddWithValue("@teacherName", teacherName);
+                    command.Parameters.AddWithValue("@teacherName", standardModel.teacherName);
                     command.Parameters.AddWithValue("@Standard", standardModel.Standard);
                     command.Parameters.AddWithValue("@Section", standardModel.Section);
                     command.Parameters.AddWithValue("@Age", standardModel.Age);
@@ -238,7 +239,7 @@ namespace TestDemo1.Controllers
                     {
                         standardModel = new StandardModel();
 
-                        //standardModel.StudentId = (int)reader["StudentId"];
+                        standardModel.StudentId = (int)reader["StudentId"];
                         standardModel.StudentName = reader["StudentName"].ToString();
                         standardModel.Standard =reader["Standard"].ToString();
                         standardModel.Section = reader["Section"].ToString();
@@ -257,7 +258,7 @@ namespace TestDemo1.Controllers
         {
             StandardModel studentmodel = JsonSerializer.Deserialize< StandardModel >(model)!;
 
-          //  studentmodel.StudentId = Id;
+            studentmodel.StudentId = Id;
 
             using (MySqlConnection connection = new MySqlConnection(connectionString))
             {
@@ -265,7 +266,7 @@ namespace TestDemo1.Controllers
 
                 using (MySqlCommand command = new MySqlCommand(queryString, connection))
                 {
-                    //command.Parameters.AddWithValue("@StudentId", studentmodel.StudentId);
+                    command.Parameters.AddWithValue("@StudentId", studentmodel.StudentId);
                     command.Parameters.AddWithValue("@StudentName", studentmodel.StudentName);
                     command.Parameters.AddWithValue("@Standard", studentmodel.Standard);
                     command.Parameters.AddWithValue("@Section", studentmodel.Section);

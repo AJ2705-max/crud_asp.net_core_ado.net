@@ -120,7 +120,7 @@
 
                     <div class="form-group">
                         <label for="UStudentId" class="col-form-label">StudentId:</label>
-                        <input type="text" class="form-control" id="UStudentId" readonly>
+                        <input type="text" class="form-control" id="UStudentId" hidden>
                     </div>
 
                     <div class="form-group">
@@ -168,7 +168,7 @@
 
         <thead>
             <tr>
-               @*  <th>Student Id</th> *@
+                <th>Student Id</th>
                 <th>Student Name</th>
                 <th>TeacherName</th>
                 <th>Standard</th>
@@ -183,7 +183,7 @@
             @foreach (var item in Model)
             {
                 <tr>
-                    @* <td>@Html.DisplayFor(modelItem => item.StudentId)</td> *@
+                    <td>@Html.DisplayFor(modelItem => item.StudentId)</td>
                     <td>@Html.DisplayFor(modelItem => item.StudentName)</td>
                     <td>@Html.DisplayFor(modelItem => item.teacherName)</td>
                     <td>@Html.DisplayFor(modelItem => item.Standard)</td>
@@ -193,9 +193,9 @@
                     <td>@Html.DisplayFor(modelItem => item.Address)</td>
                     <td>
 
-                       @*  <a class="btn btn-info" onclick="PopulateUpdateStandard(@item.StudentId)" data-bs-toggle="modal" data-bs-target="#updateStandardModal">Update</a> *@
+                        <a class="btn btn-info" onclick="PopulateUpdateStandard(@item.StudentId)" data-bs-toggle="modal" data-bs-target="#updateStandardModal">Update</a>
                         @*  <a class="btn btn-primary" onclick="ViewStudents(@item.StudentId)" data-bs-toggle="modal" data-bs-target="#viewStudentModal">View</a> *@
-                       @*  <a class="btn btn-danger" onclick="DeleteStandard(@item.StudentId)">Delete</a> *@
+                        <a class="btn btn-danger" onclick="DeleteStandard(@item.StudentId)">Delete</a>
 
 
 
@@ -260,7 +260,7 @@ else
         }
 
         var standardDetails = {
-          //  StudentId: $("#StudentId").val(),
+            StudentId: $("#StudentId").val(),
             StudentName: $("#StudentName").val(),
             teacherName: $("#teacherName").val(),
             Standard: $("#Standard").val(),
@@ -283,13 +283,12 @@ else
             processData: false,
             cache: false,
             success: function (data) {
-                if (data.status === "success") {
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Success',
-                        text: data.message
-                    });
-                }
+                Swal.fire({
+                    title: "Good job!",
+                    text: "Data updated successfully",
+                    icon: "success",
+                    confirmButtonText: "Ok",
+                });
                 window.location.href = '/Standard/ViewStandard';
             },
             error: function (error) {
@@ -329,24 +328,24 @@ else
     //         Address: this.Address
     //     };
 
-        // var oModel = {
-        //     StudentName = $("#StudentName").val(),
-        //     teacherName = $("#teacherName").val(),
-        //     Standard = $("#Standard").val(),
-        //     Section = $("#Section").val(),
-        //     Age = $("#Age").val(),
-        //     Gender = $('input[name="Gender"]:checked').val(),
-        //     Address = $("#Address").val(),
-        // }
-        debugger;
-        // $.ajax({
-        //     type: "POST",
-        //     url: "/Standard/AddStandard",
-        //     contentType: "application/json",
-        //     data: JSON.stringify(oModel),
-        //     dataType: 'json',
-        //     cache: false,
-        //     success: function (data) {
+    // var oModel = {
+    //     StudentName = $("#StudentName").val(),
+    //     teacherName = $("#teacherName").val(),
+    //     Standard = $("#Standard").val(),
+    //     Section = $("#Section").val(),
+    //     Age = $("#Age").val(),
+    //     Gender = $('input[name="Gender"]:checked').val(),
+    //     Address = $("#Address").val(),
+    // }
+    debugger;
+    // $.ajax({
+    //     type: "POST",
+    //     url: "/Standard/AddStandard",
+    //     contentType: "application/json",
+    //     data: JSON.stringify(oModel),
+    //     dataType: 'json',
+    //     cache: false,
+    //     success: function (data) {
 
     //     var formData = new FormData();
     //     formData.append("standard", JSON.stringify(oModel));
@@ -590,6 +589,10 @@ else
 
     function UpdateStandard() {
         debugger;
+
+        if (!validateForm()) {
+            return;
+        }
 
         var studentID = {
             StudentId: $('#UStudentId').val()

@@ -15,10 +15,10 @@ namespace TestDemo1.Controllers
         public string Gender { get; set; }
         public string Address { get; set; }
 
-        void AddStandard(StandardController standard);
-        dynamic GetTeacherNames();
-        void AddStandard(ITeacherService teacherService);
-        void AddStandard(StandardModel standard);
+        public  void AddStandard(StandardController standard);
+        public dynamic GetTeacherNames();
+        public void AddStandard(ITeacherService teacherService);
+        public void AddStandard(StandardModel standard);
         
     }
 }
