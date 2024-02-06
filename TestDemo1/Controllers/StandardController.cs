@@ -16,13 +16,7 @@ namespace TestDemo1.Controllers
         private readonly ITeacherService _teacherService;
         public object teacherName;
 
-        //public object StudentName { get; internal set; }
-        //public object TeacherName { get; internal set; }
-        //public object Standard { get; internal set; }
-        //public object Section { get; internal set; }
-        //public object Age { get; internal set; }
-        //public object Gender { get; internal set; }
-        //public object Address { get; internal set; }
+
 
         public StandardController(IConfiguration configuration,ITeacherService teacherService)
         {
@@ -98,95 +92,7 @@ namespace TestDemo1.Controllers
             return View();
         }
 
-        //[HttpPost]
-        //public IActionResult AddStandard([FromBody] StandardModel standard, ITeacherService teacherService)
-        //{
-        //    teacherService.AddStandard(standard);
-
-        //    string teacherName = teacherService.GetTeacherNames();
-
-        //    using (MySqlConnection connection = new MySqlConnection(connectionString))
-        //    {
-        //        const string query = "INSERT INTO StudentStandard (StudentName, teacherName, Standard, Section, Age, Gender, Address) VALUES (@StudentName, @teacherName, @Standard, @Section, @Age, @Gender, @Address);";
-
-        //        using (MySqlCommand command = new MySqlCommand(query, connection))
-        //        {
-        //            connection.Open();
-
-        //            command.Parameters.AddWithValue("@StudentName", standard.StudentName);
-        //            command.Parameters.AddWithValue("@teacherName", teacherName);
-        //            command.Parameters.AddWithValue("@Standard", standard.Standard);
-        //            command.Parameters.AddWithValue("@Section", standard.Section);
-        //            command.Parameters.AddWithValue("@Age", standard.Age);
-        //            command.Parameters.AddWithValue("@Gender", standard.Gender);
-        //            command.Parameters.AddWithValue("@Address", standard.Address);
-
-        //            command.ExecuteNonQuery();
-        //        }
-        //    }
-
-
-        //    return Json(new { success = true, message = "Data updated successfully" });
-        //}
-        //[HttpPost]  <<--Not Working-->>
-        //public IActionResult AddStandard([FromBody] StandardModel standard)   
-        //{
-        //    // Fetch the teacher names
-        //    ViewBag.TeacherList = _teacherController.GetTeacherNames();
-
-        //    using (MySqlConnection connection = new MySqlConnection(connectionString))
-        //    {
-        //        const string query = "INSERT INTO StudentStandard (StudentName, teacherName ,Standard, Section, Age, Gender, Address) values (@StudentName, @teacherName, @Standard, @Section, @Age,  @Gender, @Address);";
-
-        //        using (MySqlCommand command = new MySqlCommand(query, connection))
-        //        {
-        //            connection.Open();
-
-        //            command.Parameters.AddWithValue("@StudentName", standard.StudentName);
-        //            command.Parameters.AddWithValue("@teacherName", standard.teacherName);
-        //            command.Parameters.AddWithValue("@Standard", standard.Standard);
-        //            command.Parameters.AddWithValue("@Section", standard.Section);
-        //            command.Parameters.AddWithValue("@Age", standard.Age);
-        //            command.Parameters.AddWithValue("@Gender", standard.Gender);
-        //            command.Parameters.AddWithValue("@Address", standard.Address);
-
-        //            command.ExecuteNonQuery();
-        //        }
-        //    }
-
-        //    // If you want to use the ViewBag data in the view returned after adding a standard,
-        //    // you should return a ViewResult instead of a JsonResult.
-        //    // Replace "ViewStandard" with the name of your view.
-        //    return View("ViewStandard");
-        //}
-
-
-        //[HttpPost]
-        //public IActionResult AddStandard([FromBody] StandardModel standard)
-        //{
-        //    using (MySqlConnection connection = new MySqlConnection(connectionString))
-        //    {
-        //        const string query = "INSERT INTO StudentStandard (StudentName, Standard, Section, Age, Gender, Address) values (@StudentName, @Standard, @Section, @Age,  @Gender, @Address);";
-
-        //        using (MySqlCommand command = new MySqlCommand(query, connection))
-        //        {
-        //            connection.Open();
-
-        //            command.Parameters.AddWithValue("@StudentName", standard.StudentName);
-        //            command.Parameters.AddWithValue("@Standard", standard.Standard);
-        //            command.Parameters.AddWithValue("@Section", standard.Section);
-        //            command.Parameters.AddWithValue("@Age", standard.Age);
-        //            command.Parameters.AddWithValue("@Gender", standard.Gender);
-        //            command.Parameters.AddWithValue("@Address", standard.Address);
-
-        //            command.ExecuteNonQuery();
-        //        }
-        //    }
-
-        //    // Redirect to the TeacherController with the selected standard as a query string parameter
-        //    return RedirectToAction("AddTeacher", "Teacher", new { standard = standard.Standard });
-        //}
-
+     
         [HttpPost]
         public IActionResult AddStandard( StandardModel standardModel )
         {

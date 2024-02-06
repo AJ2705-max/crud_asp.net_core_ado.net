@@ -24,28 +24,7 @@ public class TeacherService : ITeacherService
         throw new NotImplementedException();
     }
 
-    //public void AddStandard(StandardController standard)
-    //{
-    //    using (MySqlConnection connection = new MySqlConnection(_connectionString))
-    //    {
-    //        const string query = "INSERT INTO StudentStandard (StudentName, teacherName, Standard, Section, Age, Gender, Address) VALUES (@StudentName, @teacherName, @Standard, @Section, @Age, @Gender, @Address);";
-
-    //        using (MySqlCommand command = new MySqlCommand(query, connection))
-    //        {
-    //            connection.Open();
-
-    //            command.Parameters.AddWithValue("@StudentName", standard.StudentName);
-    //            command.Parameters.AddWithValue("@teacherName", standard.teacherName);
-    //            command.Parameters.AddWithValue("@Standard", standard.Standard);
-    //            command.Parameters.AddWithValue("@Section", standard.Section);
-    //            command.Parameters.AddWithValue("@Age", standard.Age);
-    //            command.Parameters.AddWithValue("@Gender", standard.Gender);
-    //            command.Parameters.AddWithValue("@Address", standard.Address);
-
-    //            command.ExecuteNonQuery();
-    //        }
-    //    }
-    //}
+    
 
     public void AddStandard(ITeacherService teacherService)
     {

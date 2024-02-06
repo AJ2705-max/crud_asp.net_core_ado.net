@@ -54,6 +54,35 @@
     </div>
 </div>
 
+
+
+<div class="modal fade" id="viewStudentModal" tabindex="-1" aria-labelledby="viewStudentModal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="viewStudentModal">Student View</h5>
+                <button type="button" class="close" data-dismiss="modal">×</button>
+            </div>
+            <div class="modal-body">
+                <form id="viewStudentModal" name="viewStudentModal">
+
+                    <div class="mb-3">
+                        <label class="form-label">Student Names:</label>
+                        <ul id="studentList">
+                           @*  @foreach (var student in Model)
+                            {
+                                <li>@student.StudentName</li>
+                            } *@
+                        </ul>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 @if (Model != null)
 {
 
@@ -63,7 +92,7 @@
             <tr>
                 <th>Id</th>
                 <th>TeacherName</th>
-                <th>Standard</th>
+               @*  <th>Standard</th> *@
                 <th>Actions</th>
             </tr>
         </thead>
@@ -73,12 +102,13 @@
                 <tr>
                     <td>@Html.DisplayFor(modelItem => item.id)</td>
                     <td>@Html.DisplayFor(modelItem => item.teacherName)</td>
-                    <td>@Html.DisplayFor(modelItem => item.Standard)</td>
+                    @* <td>@Html.DisplayFor(modelItem => item.Standard)</td> *@
                     <td>
 
-                        <a class="btn btn-info" onclick="GetStudentStandard(@item.id)" data-bs-toggle="modal" data-bs-target="#addteacher">Update</a>
+                       @*  <a class="btn btn-info" onclick="GetStudentStandard(@item.id)" data-bs-toggle="modal" data-bs-target="#addteacher">Update</a> *@
+                        <a class="btn btn-warning" onclick="GetStudentDetails(@item.id)" data-bs-toggle="modal" data-bs-target="#viewStudentModal">StudentList</a>
                         @*  <a class="btn btn-primary" onclick="ViewStudents(@item.StudentId)" data-bs-toggle="modal" data-bs-target="#viewStudentModal">View</a> *@
-                        <a class="btn btn-danger" onclick="DeleteStandard(@item.id)">Delete</a>
+                       @*  <a class="btn btn-danger" onclick="DeleteStandard(@item.id)">Delete</a> *@
 
 
 
@@ -106,6 +136,9 @@ else
         $('#teacherModal').modal('hide');
     });
 
+    $('#viewStudentModal').on('click', 'button.close', function (eventObject) {
+        $('#viewStudentModal').modal('hide');
+    });
 
     function AddTeacher() {
         var id = $("#id").val();
@@ -142,44 +175,30 @@ else
         });
     }
 
-    // function AssignStudentStandardToTeacher() {
-    //     var studentId = $("#studentId").val();
-    //     var teacherId = $("#teacherId").val();
+    
 
-    //     // Assuming getStudentStandard is a function that retrieves the standard of a student from the StandardModel
-    //     var studentStandard = getStudentStandard(studentId);
 
-    //     var oModel = { id: teacherId, Standard: studentStandard };
+    function GetStudentDetails(teacherName) {
+        debugger;
+        $.ajax({
+            url: '/Teacher/GetStudentDetails',
+            type: 'GET',
+            data: { teacherName: teacherName },
+            dataType: 'json',
+            success: function (data) {
+                
+                $('#studentList').empty();
+                
+                $.each(data, function (i, item) {
+                    $('#studentList').append('<li>' + item.StudentName + '</li>');
+                });
+                
+                $('#viewStudentModal').modal('show');
+            }
+        });
+    }
 
-    //     $.ajax({
-    //         type: "POST",
-    //         url: "/Teacher/GetStudentStandard",
-    //         contentType: "application/json",
-    //         data: JSON.stringify(oModel),
-    //         dataType: 'json',
-    //         cache: false,
-    //         async: false,
-    //         success: function (data) {
-    //             Swal.fire({
-    //                 title: "Good job!",
-    //                 text: "Teacher's standard updated successfully",
-    //                 icon: "success",
-    //                 confirmButtonText: "Ok",
-    //             }).then((result) => {
-    //                 if (result.isConfirmed) {
-    //                     location.reload();
-    //                 }
-    //             });
-    //         },
-
-    //         error: function (errorThrown) {
-    //             console.log("Error updating teacher's standard:", errorThrown);
-    //             Swal.fire("Oops", "An error occurred while updating your data, Please try again later.", "error");
-    //         }
-    //     });
-    // }
-
-  
+   
 
 
 
